@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -60,7 +61,6 @@ Button add;
         extra=(TextView)findViewById(R.id.extra);
 brand=(TextView)findViewById(R.id.brand);
         disc=(TextView)findViewById(R.id.disc);
-
 
 
 
