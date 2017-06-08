@@ -1,0 +1,92 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/card_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="3dp"
+        android:elevation="5dp"
+        card_view:cardCornerRadius="@dimen/card_album_radius">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/thumbnail"
+                android:layout_width="150dp"
+                android:layout_height="@dimen/album_cover_height"
+                android:layout_margin="5dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:scaleType="fitXY" />
+            <ImageButton
+                android:layout_height="30dp"
+                android:layout_width="20dp"
+                android:layout_gravity="top|right"
+                android:layout_marginTop="5dp"
+                android:paddingLeft="@dimen/album_title_padding"
+                android:layout_marginRight="10dp"
+                android:id="@+id/close"
+                android:src="@android:drawable/ic_menu_delete"
+
+                android:layout_alignParentTop="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true" />
+
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingLeft="@dimen/album_title_padding"
+                android:paddingRight="@dimen/album_title_padding"
+                android:layout_marginTop="50dp"
+                android:textColor="@color/album_title"
+                android:textSize="20sp"
+                android:layout_toRightOf="@+id/thumbnail"
+                android:layout_toEndOf="@+id/thumbnail" />
+
+
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="40dip"
+                android:layout_below="@+id/title"
+                android:orientation="horizontal"
+                android:layout_marginTop="40dp"
+                android:weightSum="1"
+                android:layout_alignLeft="@+id/title"
+                android:layout_alignStart="@+id/title">
+                <TextView
+                    android:id="@+id/count"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:gravity="center_vertical"
+                    android:textStyle="bold"
+                    android:layout_weight="0.3"
+                    android:paddingLeft="?android:attr/expandableListPreferredChildPaddingLeft" />
+
+                <Button
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+                    android:backgroundTint="#1E9D96"
+                    android:textColor="@android:color/background_light"
+                    android:layout_weight="0.7"
+                    android:textSize="12dp"
+                    android:text="1"
+                    android:id="@+id/add" />
+            </LinearLayout>
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+
+</LinearLayout>

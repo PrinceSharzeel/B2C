@@ -1,6 +1,10 @@
 package commerce.ssuk;
 
 import android.content.Context;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -18,25 +22,24 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 import java.util.Locale;
 
-public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.MyViewHolder> {
+public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.MyViewHolder>  {
 
     private Context mContext;
-    private List<Item> albumList;
+    private List<Options> albumList;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView title, count;
-        public ImageView thumbnail, overflow;
+        public TextView title;
+        public ImageView thumbnail;
 
         public MyViewHolder(View view) {
             super(view);
             title = (TextView) view.findViewById(R.id.title);
-            count = (TextView) view.findViewById(R.id.count);
             thumbnail = (ImageView) view.findViewById(R.id.thumbnail);
         }
     }
 
 
-    public CategoryAdapter(Context mContext, List<Item> albumList) {
+    public CategoryAdapter(Context mContext, List<Options> albumList) {
         this.mContext = mContext;
         this.albumList = albumList;
     }
@@ -51,12 +54,31 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.MyView
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, int position) {
-       Item album = albumList.get(position);
+       final Options album = albumList.get(position);
         holder.title.setText(album.getName());
-        holder.count.setText(album.getNumOfSongs()+"Items");
-
+    String a=album.getName();
         // loading album cover using Glide library
-        Picasso.with(mContext).load(album.getThumbnail()).into(holder.thumbnail);
+//        Picasso.with(mContext).load(album.getThumbnail()).into(holder.thumbnail);
+        holder.thumbnail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Fragment fragment;
+                fragment=new ProductListFrag();
+                Bundle data= new Bundle();
+                data.putString("category",album.getName());
+                fragment .setArguments(data);
+
+
+                FragmentTransaction transaction = ((FragmentActivity)mContext).getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.fcl, fragment);
+                transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+                transaction.addToBackStack(null);
+                transaction.commit();
+
+
+            }
+        });
 
 
     }
@@ -67,3 +89,33 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.MyView
         return albumList.size();
     }
 }
+
+
+
+class Options {
+    private String name;
+    private String thumbnail;
+
+    public Options() {
+    }
+
+    public Options(String name,String thumbnail) {
+        this.name = name;
+        this.thumbnail = thumbnail;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getThumbnail() {
+        return thumbnail;
+    }
+
+    public void setThumbnail(String thumbnail) {
+        this.thumbnail = thumbnail;
+    }}

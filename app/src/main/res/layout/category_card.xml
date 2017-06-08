@@ -6,21 +6,27 @@
     <android.support.v7.widget.CardView
         android:id="@+id/card_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_margin="@dimen/card_margin"
+        android:layout_margin="1dp"
         android:elevation="3dp"
         card_view:cardCornerRadius="@dimen/card_album_radius">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:id="@+id/image">
 
             <ImageView
                 android:id="@+id/thumbnail"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/album_cover_height"
+                android:layout_width="wrap_content"
+                android:layout_height="130dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/car2"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="15dp"
+
+
                 android:clickable="true"
                 android:scaleType="fitXY" />
 
@@ -32,25 +38,12 @@
                 android:gravity="center"
                 android:paddingLeft="@dimen/album_title_padding"
                 android:paddingRight="@dimen/album_title_padding"
-                android:paddingTop="@dimen/album_title_padding"
+                android:paddingBottom="10dp"
                 android:textColor="@color/album_title"
                 android:textSize="@dimen/album_title" />
 
-            <TextView
-                android:id="@+id/count"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/title"
-
-                android:gravity="center"
-                android:paddingBottom="@dimen/songs_count_padding_bottom"
-                android:paddingLeft="@dimen/album_title_padding"
-                android:paddingRight="@dimen/album_title_padding"
-                android:textSize="@dimen/songs_count" />
-
 
         </RelativeLayout>
-
     </android.support.v7.widget.CardView>
 
 </LinearLayout>

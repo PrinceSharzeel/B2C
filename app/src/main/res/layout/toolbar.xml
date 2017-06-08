@@ -5,6 +5,17 @@
     android:layout_height="wrap_content"
     android:background="?attr/colorPrimary"
     android:id="@+id/toolbar"
+    android:elevation="10dp"
+
     android:minHeight="?attr/actionBarSize"
+    android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
     app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-    app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+    app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" >
+
+
+    <ImageView
+        android:layout_width="12dp"
+        android:contentDescription="logo"
+        android:layout_height="12dp"
+        android:layout_gravity="left"/>
+    </android.support.v7.widget.Toolbar>

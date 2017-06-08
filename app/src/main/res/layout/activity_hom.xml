@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".MainActivity"
+    android:id="@+id/frg"
     android:orientation="vertical">
 
     <include layout="@layout/toolbar" android:id="@+id/toolbar"/>
@@ -19,7 +20,7 @@
     <android.support.design.widget.TabLayout
         android:id="@+id/tabs"
         android:layout_width="match_parent"
-        android:elevation="15dp"
+        android:elevation="8dp"
         app:tabTextAppearance="@style/MineCustomTabText"
         android:layout_height="wrap_content"
         android:background="#fff"

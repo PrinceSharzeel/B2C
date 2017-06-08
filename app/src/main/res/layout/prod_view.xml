@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<android.support.v4.widget.NestedScrollView android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/nsv"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:background="#DADADA"
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/card_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="1dp"
+            android:elevation="5dp"
+            card_view:cardCornerRadius="@dimen/card_album_radius">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:weightSum="1"
+                    android:id="@+id/linearLayout0"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true">
+                    <TextView
+                        android:id="@+id/count0"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:gravity="center_vertical"
+                        android:textStyle="bold"
+                        android:textSize="20sp"
+
+                        android:maxLines="5"
+                        android:singleLine="false"
+                        android:layout_weight="0.5"
+                        android:text="Miley Vegetables"
+                        android:paddingLeft="?android:attr/expandableListPreferredChildPaddingLeft" />
+                    <TextView
+                        android:id="@+id/brand"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:gravity="center_vertical"
+                        android:textStyle="bold"
+                        android:textSize="15sp"
+
+                        android:maxLines="5"
+                        android:singleLine="false"
+                        android:layout_weight="0.5"
+                        android:text="Miley Vegetables"
+                        android:paddingLeft="?android:attr/expandableListPreferredChildPaddingLeft" />
+
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/thumbnail"
+                    android:layout_width="match_parent"
+                    android:layout_height="250dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:clickable="true"
+                    android:src="@drawable/car1"
+                    android:layout_below="@+id/linearLayout0"
+                    android:scaleType="fitXY" />
+
+
+                <TextView
+                    android:id="@+id/title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:paddingLeft="@dimen/album_title_padding"
+                    android:paddingRight="@dimen/album_title_padding"
+                    android:paddingTop="@dimen/album_title_padding"
+                    android:textColor="@color/album_title"
+                    android:textSize="@dimen/album_title"
+                    android:text="58Kg"
+                    android:layout_below="@+id/thumbnail"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true" />
+                <TextView
+                    android:id="@+id/desc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="15 p/gram"
+
+                    android:paddingLeft="@dimen/album_title_padding"
+                    android:paddingRight="@dimen/album_title_padding"
+                    android:textColor="@color/album_title"
+                    android:textSize="@dimen/songs_count"
+                    android:layout_below="@+id/title"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true" />
+
+
+                <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:id="@+id/linearLayout"
+                    android:layout_below="@+id/desc"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true">
+                    <TextView
+                        android:id="@+id/count"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:gravity="center"
+                        android:textStyle="bold"
+                        android:textSize="25dp"
+                        android:text="278 $"
+                        android:paddingLeft="?android:attr/expandableListPreferredChildPaddingLeft" />
+
+                </LinearLayout>
+                <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="1"
+                    android:id="@+id/linearLayoutd"
+                    android:layout_below="@+id/linearLayout"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true">
+                    <TextView
+                        android:id="@+id/discount"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:gravity="center_vertical"
+                        android:textStyle="bold"
+                        android:textSize="25dp"
+                        android:text="278 $"
+                        android:layout_weight="0.35"
+                        android:paddingLeft="10dp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.3"
+                        android:textSize="12sp"
+                        android:text="ADD"
+                        android:id="@+id/discper" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.35"
+                        android:textSize="12sp"
+                        android:text="ADD"
+                        android:id="@+id/discexp" />
+                </LinearLayout>
+            </RelativeLayout>
+
+        </android.support.v7.widget.CardView>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:gravity="center_vertical"
+            android:textStyle="bold"
+            android:text="Quantity"
+            android:layout_weight="1"
+            android:paddingLeft="?android:attr/expandableListPreferredChildPaddingLeft" />
+
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/card"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="5dp"
+            android:elevation="5dp"
+            card_view:cardCornerRadius="@dimen/card_album_radius">
+
+
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="40dip"
+                android:orientation="horizontal"
+                android:weightSum="1"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:id="@+id/linearLa">
+                <TextView
+                    android:id="@+id/max"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:gravity="center_vertical"
+                    android:textStyle="bold"
+                    android:text="Max:"
+                    android:layout_weight="0.5"
+                    android:paddingLeft="?android:attr/expandableListPreferredChildPaddingLeft" />
+
+                <TextView
+                    android:id="@+id/min"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:gravity="center_vertical"
+                    android:textStyle="bold"
+                    android:text="Min:"
+                    android:layout_weight="0.5"
+                    android:paddingLeft="?android:attr/expandableListPreferredChildPaddingLeft" />
+
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:gravity="center_vertical"
+            android:textStyle="bold"
+            android:text="Description"
+            android:layout_weight="1"
+            android:paddingLeft="?android:attr/expandableListPreferredChildPaddingLeft" />
+
+
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/cardvw"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="5dp"
+            android:elevation="5dp"
+            card_view:cardCornerRadius="@dimen/card_album_radius">
+
+
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="40dip"
+                android:orientation="horizontal"
+                android:weightSum="1"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:id="@+id/linearLayouer">
+                <TextView
+                    android:id="@+id/disc"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:gravity="center_vertical"
+                    android:textStyle="bold"
+                    android:inputType="textMultiLine"
+                    android:maxLength="180"
+                    android:lines="8"
+                    android:maxLines="8"
+                    android:text="BGUHBJHB KNBKJN"
+                    android:layout_weight="1"
+                    android:paddingLeft="?android:attr/expandableListPreferredChildPaddingLeft" />
+
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:gravity="center_vertical"
+            android:textStyle="bold"
+            android:text="Extra"
+            android:layout_weight="1"
+            android:paddingLeft="?android:attr/expandableListPreferredChildPaddingLeft" />
+
+
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/card_vw"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="5dp"
+            android:elevation="5dp"
+            card_view:cardCornerRadius="@dimen/card_album_radius">
+
+
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="40dip"
+                android:orientation="horizontal"
+                android:weightSum="1"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:id="@+id/linearLayouter">
+                <TextView
+                    android:id="@+id/extra"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:gravity="center_vertical"
+                    android:textStyle="bold"
+                    android:text="BGUHBJHB KNBKJN"
+                    android:layout_weight="1"
+                    android:paddingLeft="?android:attr/expandableListPreferredChildPaddingLeft" />
+
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+
+
+    </LinearLayout>
+</android.support.v4.widget.NestedScrollView>
