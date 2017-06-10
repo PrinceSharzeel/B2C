@@ -92,7 +92,7 @@ public class TrolleyAdapter extends RecyclerView.Adapter<TrolleyAdapter.MyViewHo
         holder.count.setText(album.getNumOfSongs());
 //Log.e(album.getName()+'');
         // loading album cover using Glide library
-        Picasso.with(mContext).load(album.getThumbnail()).into(holder.thumbnail);
+        Picasso.with(mContext).load("http://192.168.43.227:8000"+album.getThumbnail()).into(holder.thumbnail);
         holder.thumbnail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -144,15 +144,17 @@ public class TrolleyAdapter extends RecyclerView.Adapter<TrolleyAdapter.MyViewHo
 
 
 class Orders {
-    private String name,exp,price;
+    private String name,price,pro,disc,redprice;
     public Orders() {
     }
 
-    public Orders(String name,String exp,String category,String brand,String price,String unit,String litres,String weight,String packge,String min,String max,String disc,String pro,String thumbnail) {
+    public Orders(String name,String price,String pro,String disc,String redprice) {
         this.name = name;
 
-        this.exp = exp;
+        this.pro= pro;
         this.price =price;
+        this.disc=disc;
+        this.redprice=redprice;
     }
 
     public String getName() {
@@ -165,12 +167,12 @@ class Orders {
 
 
 
-    public String getExp() {
-        return exp;
+    public String getPro() {
+        return pro;
     }
 
-    public void setExp(String exp) {
-        this.exp = exp;
+    public void setPro(String pro) {
+        this.pro = pro;
     }
 
 
@@ -183,10 +185,23 @@ class Orders {
     }
 
 
+    public String getDisc() {
+        return disc;
+    }
+
+    public void setDisc(String disc) {
+        this.disc = disc;
+    }
 
 
 
+    public String getRedprice() {
+        return redprice;
+    }
 
+    public void setRedprice(String redprice) {
+        this.redprice =redprice;
+    }
 
 
 

@@ -52,13 +52,10 @@ Button add;
         unit=(TextView)findViewById(R.id.desc);
         thumbnail=(ImageView)findViewById(R.id.thumbnail);
   add=(Button)findViewById(R.id.add);
-        max=(TextView)findViewById(R.id.max);
        discount=(TextView)findViewById(R.id.discount);
         discper=(TextView)findViewById(R.id.discper);
         discexp=(TextView)findViewById(R.id.discexp);
 
-        min=(TextView)findViewById(R.id.min);
-        extra=(TextView)findViewById(R.id.extra);
 brand=(TextView)findViewById(R.id.brand);
         disc=(TextView)findViewById(R.id.disc);
 
@@ -89,14 +86,12 @@ brand=(TextView)findViewById(R.id.brand);
                                 Log.e("imageew","http://192.168.43.227:8000");
                                 Picasso.with(getApplicationContext()).load("http://192.168.43.227:8000"+person.getString("ppro")
                                 ).into(thumbnail);
-                                max.setText("Max : "+person.getString("pmax"));
-                                min.setText("Min : "+person.getString("pmin"));
+
                                 brand.setText(person.getString("pbrand"));
                             discper.setText("Discount "+person.getString("pdisc")+" %");
                             discexp.setText("Till: "+person.getString("pexp"));
 
 
-                                extra.setText("Package :"+person.getString("package")+"    Units Available: "+person.getString("punit")+"\n");
 
                               long a= Integer.parseInt(person.getString("preddisc"));
                                a=Integer.parseInt(person.getString("price"))+a;

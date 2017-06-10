@@ -6,12 +6,12 @@ package commerce.ssuk;
 public class Item {
     private String name;
     private String numOfSongs;
-    private int thumbnail;
+    private String thumbnail;
 
     public Item() {
     }
 
-    public Item(String name, String numOfSongs, int thumbnail) {
+    public Item(String name, String numOfSongs,String thumbnail) {
         this.name = name;
         this.numOfSongs = numOfSongs;
         this.thumbnail = thumbnail;
@@ -33,10 +33,10 @@ public class Item {
         this.numOfSongs = numOfSongs;
     }
 
-    public int getThumbnail() {
+    public String getThumbnail() {
         return thumbnail;
     }
 
-    public void setThumbnail(int thumbnail) {
+    public void setThumbnail(String thumbnail) {
         this.thumbnail = thumbnail;
     }}

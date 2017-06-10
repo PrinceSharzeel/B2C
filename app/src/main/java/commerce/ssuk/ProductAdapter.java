@@ -3,6 +3,7 @@ package commerce.ssuk;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -30,11 +31,11 @@ import java.util.Locale;
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHolder>  {
 
     private Context mContext;
-    private List<Item> albumList;
+    private List<Orders> albumList;
 
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView title, count;
+        public TextView title, count,disc,redprice;
         public ImageView thumbnail;
         public Button add;
 
@@ -43,9 +44,11 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
             super(view);
             title = (TextView) view.findViewById(R.id.title);
             count = (TextView) view.findViewById(R.id.count);
+            disc = (TextView) view.findViewById(R.id.desc);
+
+            redprice = (TextView) view.findViewById(R.id.dis);
             thumbnail = (ImageView) view.findViewById(R.id.thumbnail);
             add=(Button) view.findViewById(R.id.add);
-
 
 
             add.setOnClickListener(new View.OnClickListener() {
@@ -68,12 +71,12 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
 
 
 
-    public ProductAdapter(Context mContext, List<Item> albumList) {
+    public ProductAdapter(Context mContext, List<Orders> albumList) {
         this.mContext = mContext;
         this.albumList = albumList;
     }
 
-    public ProductAdapter(List<Item> albumList, MyAdapterListener listener) {
+    public ProductAdapter(List<Orders> albumList, MyAdapterListener listener) {
 
        this.albumList=albumList;
         onClickListener = listener;
@@ -90,9 +93,16 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
-        final Item album = albumList.get(position);
+        final Orders album = albumList.get(position);
         holder.title.setText(album.getName());
-        holder.count.setText(album.getNumOfSongs()+"Items");
+        holder.count.setText("€ "+album.getPrice());
+        holder.redprice.setText("€ "+album.getRedprice());
+        holder.redprice.setPaintFlags(holder.redprice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+
+        holder.disc.setText(album.getDisc());
+        Picasso.with(mContext).load("http://192.168.43.227:8000"+album.getPro()).into(holder.thumbnail);
+
+
 
         // loading album cover using Glide library
         //Picasso.with(mContext).load(album.getThumbnail()).into(holder.thumbnail);
@@ -102,7 +112,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
 
                 Intent in=new Intent(v.getContext(),ProductDetail.class);
                 in.putExtra("Name",album.getName());
-                in.putExtra("Price",album.getNumOfSongs());
+                in.putExtra("Price",album.getPrice());
               v.getContext().startActivity(in);
 
 

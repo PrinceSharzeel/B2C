@@ -191,16 +191,6 @@
         </RelativeLayout>
 
     </android.support.v7.widget.CardView>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:focusable="false"
-        android:focusableInTouchMode="false"
-        android:gravity="center_vertical"
-        android:textStyle="bold"
-        android:text="Quantity"
-        android:layout_weight="1"
-        android:paddingLeft="?android:attr/expandableListPreferredChildPaddingLeft" />
 
 
     <android.support.v7.widget.CardView
@@ -213,40 +203,6 @@
         card_view:cardCornerRadius="@dimen/card_album_radius">
 
 
-        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="match_parent"
-            android:layout_height="40dip"
-            android:orientation="horizontal"
-            android:weightSum="1"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:id="@+id/linearLa">
-            <TextView
-                android:id="@+id/max"
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:focusable="false"
-                android:focusableInTouchMode="false"
-                android:gravity="center_vertical"
-                android:textStyle="bold"
-                android:text="Max:"
-                android:layout_weight="0.5"
-                android:paddingLeft="?android:attr/expandableListPreferredChildPaddingLeft" />
-
-    <TextView
-        android:id="@+id/min"
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:focusable="false"
-        android:focusableInTouchMode="false"
-        android:gravity="center_vertical"
-        android:textStyle="bold"
-        android:text="Min:"
-        android:layout_weight="0.5"
-        android:paddingLeft="?android:attr/expandableListPreferredChildPaddingLeft" />
-
-</LinearLayout>
     </android.support.v7.widget.CardView>
 
     <TextView
@@ -299,52 +255,9 @@
 
         </LinearLayout>
         </android.support.v7.widget.CardView>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:focusable="false"
-        android:focusableInTouchMode="false"
-        android:gravity="center_vertical"
-        android:textStyle="bold"
-        android:text="Extra"
-        android:layout_weight="1"
-        android:paddingLeft="?android:attr/expandableListPreferredChildPaddingLeft" />
 
 
 
-    <android.support.v7.widget.CardView
-        android:id="@+id/card_vw"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="5dp"
-        android:elevation="5dp"
-        card_view:cardCornerRadius="@dimen/card_album_radius">
-
-
-        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="match_parent"
-            android:layout_height="40dip"
-            android:orientation="horizontal"
-            android:weightSum="1"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:id="@+id/linearLayouter">
-            <TextView
-                android:id="@+id/extra"
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:focusable="false"
-                android:focusableInTouchMode="false"
-                android:gravity="center_vertical"
-                android:textStyle="bold"
-                android:text="BGUHBJHB KNBKJN"
-                android:layout_weight="1"
-                android:paddingLeft="?android:attr/expandableListPreferredChildPaddingLeft" />
-
-        </LinearLayout>
-    </android.support.v7.widget.CardView>
 
 
 

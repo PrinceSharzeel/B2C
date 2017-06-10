@@ -83,7 +83,7 @@ public class OrderFrag  extends Fragment{
                // Toast.makeText(getContext(),"id: " + c.getString(0) + " \n" +"Name: " + c.getString(1) + "\n" +
                //                 "Email: " + c.getString(2),
                 //        Toast.LENGTH_LONG).show();
-                Item it =new Item(c.getString(1),"Rs."+c.getString(2),R.drawable.car1);
+                Item it =new Item(c.getString(1),"Rs."+c.getString(2),"/static/media/Nutella.png");
                 albumList.add(it);
                 //db.deleteContact(Integer.parseInt(c.getString(0)));
                 i++;

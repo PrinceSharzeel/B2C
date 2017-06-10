@@ -73,11 +73,9 @@ public class OneFragment extends Fragment{
         recyclerView = (RecyclerView)view.findViewById(R.id.recycler_view);
 
         albumList = new ArrayList<>();
-        adapter = new ProductAdapter(getContext(), albumList);
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getContext(), 2);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(adapter);
     //carousel
 
 
@@ -99,11 +97,7 @@ public class OneFragment extends Fragment{
                                 String name = person.getString("ptitle");
                                 String email = person.getString("ptitle");
 
-                                Item a=new Item(name,email,R.drawable.bg);
-                                albumList.add(a);
-                                Log.e("resultsuij",name);
-
-                                adapter.notifyDataSetChanged();
+                               // Item a=new Item(name,email,R.drawable.bg);
 
 
                             }

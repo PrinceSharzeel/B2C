@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<android.support.v4.widget.NestedScrollView android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/nsv"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+
+    android:background="#DADADA"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:layout_margin="10dp"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:text="Register ?"/>
+        <android.support.v7.widget.CardView
+            android:id="@+id/card_username"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="14dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="14dp"
+            app:cardBackgroundColor="#fff">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"
+                    android:layout_margin="10dp"
+                    android:gravity="center"
+                    android:textStyle="bold"
+                    android:id="@+id/reg"
+                    android:text="Use your contact for signup"/>
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:id="@+id/first0"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:id="@+id/cont"
+                        android:padding="20dp"
+                        android:paddingTop="40dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+
+                        android:inputType="text"
+
+                        android:backgroundTint="@color/colorAccent"
+
+                        android:drawablePadding="4dp"
+                        android:layout_below="@+id/reg"
+                        android:drawableTint="@android:color/darker_gray"
+                        android:hint="Contact"
+                        android:maxLines="1"
+                        android:textColorHint="@android:color/darker_gray"
+                        android:textSize="18sp"
+                        android:focusable="true"
+                        android:clickable="true"/></android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:id="@+id/second0"
+                    android:layout_below="@+id/first0"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/pswd"
+                        android:padding="20dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+
+                        android:inputType="textPassword"
+
+                        android:backgroundTint="@color/colorAccent"
+
+                        android:drawablePadding="4dp"
+                        android:drawableTint="@android:color/darker_gray"
+                        android:hint="Password"
+                        android:maxLines="1"
+                        android:layout_below="@+id/cont"
+                        android:textColorHint="@android:color/darker_gray"
+                        android:textSize="18sp"
+                        android:focusable="true"
+                        android:clickable="true"/></android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:id="@+id/third0"
+                    android:layout_below="@+id/second0"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:id="@+id/repswd"
+                        android:padding="20dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        android:drawablePadding="4dp"
+
+                        android:drawableTint="@android:color/darker_gray"
+                        android:hint="Retype Password"
+                        android:backgroundTint="@color/colorAccent"
+
+                        android:inputType="textPassword"
+                        android:maxLines="1"
+                        android:layout_below="@+id/pswd"
+
+
+                        android:textColorHint="@android:color/darker_gray"
+                        android:textSize="18sp"
+                        android:focusable="true"
+                        android:clickable="true"/></android.support.design.widget.TextInputLayout>
+ <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/register"
+                    android:gravity="right"
+                    android:layout_below="@+id/third0"
+                    android:text="Register"/>
+            </RelativeLayout>
+        </android.support.v7.widget.CardView>
+
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/card_view1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/card_margin"
+            android:elevation="3dp"
+            card_view:cardCornerRadius="@dimen/card_album_radius">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"
+                    android:layout_margin="10dp"
+                    android:gravity="center"
+                    android:textStyle="bold"
+                    android:text="Enter your details"/>
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:id="@+id/first01"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:id="@+id/name"
+                        android:padding="20dp"
+                        android:paddingTop="40dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+
+                        android:inputType="text"
+
+                        android:backgroundTint="@color/colorAccent"
+
+                        android:drawablePadding="4dp"
+                        android:layout_below="@+id/reg"
+                        android:drawableTint="@android:color/darker_gray"
+                        android:hint="Name"
+                        android:maxLines="1"
+                        android:textColorHint="@android:color/darker_gray"
+                        android:textSize="18sp"
+                        android:focusable="true"
+                        android:clickable="true"/></android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:id="@+id/second01"
+                    android:layout_below="@+id/first01"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/address"
+                        android:padding="20dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+
+                        android:inputType="textPassword"
+
+                        android:backgroundTint="@color/colorAccent"
+
+                        android:drawablePadding="4dp"
+                        android:drawableTint="@android:color/darker_gray"
+                        android:hint="Address"
+                        android:maxLines="1"
+                        android:layout_below="@+id/cont"
+                        android:textColorHint="@android:color/darker_gray"
+                        android:textSize="18sp"
+                        android:focusable="true"
+                        android:clickable="true"/></android.support.design.widget.TextInputLayout>
+
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/regfinal"
+                    android:gravity="right"
+                    android:layout_below="@+id/second01"
+                    android:text="Register"/>
+            </RelativeLayout>
+
+        </android.support.v7.widget.CardView>
+
+
+
+
+
+
+
+
+
+
+    </LinearLayout>
+</android.support.v4.widget.NestedScrollView>

@@ -164,7 +164,7 @@ public class DBAdapter {
         {
             do {
 
-                Item it =new Item(c.getString(1),"Rs."+c.getString(2),R.drawable.car1);
+              //  Item it =new Item(c.getString(1),"Rs."+c.getString(2),R.drawable.car1);
 
                 //db.deleteContact(Integer.parseInt(c.getString(0)));
                 i++;

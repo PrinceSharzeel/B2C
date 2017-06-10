@@ -1,18 +1,16 @@
 package commerce.ssuk;
 
-import android.content.SharedPreferences;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
+import android.content.SharedPreferences;import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Paint;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,9 +52,9 @@ public class AccountFrag  extends Fragment{
     private Button sign,reg;
     private LinearLayout invoice;
     private TextView rep;
-    private EditText repswd,pswd,contact,nam,order,addrs,name,usrlogin,pswdlogin;
+    private EditText repswd,pswd,contact,pin,nam,order,addrs,name,usrlogin,pswdlogin;
 
-    private static final String REGISTER_URL = "http://192.168.43.227:8000/api/register/";
+    private static final String pin_url = "http://192.168.43.227:8000/api/postcode/";
 
     private static String urlJsonArry = "http://192.168.43.227:8000/api/login/";
 
@@ -81,13 +79,10 @@ public class AccountFrag  extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState){
       View v=inflater.inflate(R.layout.account,container,false);
-        repswd=(EditText)v.findViewById(R.id.repswd);
-        pswd=(EditText)v.findViewById(R.id.pswd);
         usrlogin=(EditText)v.findViewById(R.id.edit_username0);
         pswdlogin=(EditText)v.findViewById(R.id.pswd0);
-        contact=(EditText)v.findViewById(R.id.cont);
-        addrs=(EditText)v.findViewById(R.id.address);
-       nam=(EditText)v.findViewById(R.id.name);order=(EditText)v.findViewById(R.id.order);
+        pin=(EditText)v.findViewById(R.id.pin);
+
 
 
         sign=(Button)v.findViewById(R.id.sign);reg=(Button)v.findViewById(R.id.register);
@@ -105,15 +100,26 @@ public class AccountFrag  extends Fragment{
         reg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(pswd.getText().toString().trim().equals(repswd.getText().toString().trim()))
-                {RegisterUser();}
-                else Toast.makeText(getContext(),"Password mismatch",Toast.LENGTH_LONG).show();
+
+                RegisterUser();
             }
         });
 
+try {
+    SharedPreferences pref = getContext().getSharedPreferences("session", 0); // 0 - for private mode
+
+    if (pref.getString("status", null).equals("logged")) {
+
+        Log.e("dsdds",pref.getString("status",null)+"");
+      Trans();
+    }
+
+}catch (Exception e)
+{}
 
 
-return v;
+
+        return v;
 
     }
 
@@ -124,50 +130,86 @@ return v;
 
 
 
+
+
+
+
+
+
+
+
     private void RegisterUser(){
-        final String repassword = repswd.getText().toString().trim();
-        final String password = pswd.getText().toString().trim();
-
-         //if(repassword!=password) return;
-
-        final String name=nam.getText().toString().trim();
-
-                final String addr= addrs.getText().toString().trim();
-                        final String cont= contact.getText().toString().trim();
-                                final String orders=order.getText().toString().trim();
 
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, REGISTER_URL,
-                new Response.Listener<String>() {
+        final String dest= pin.getText().toString();
+        final String origin="58e32243eaf87011c22bc744";
+        String urrr=pin_url+origin+"N"+dest;
+        Log.e("Urlslfn",urrr);
+
+        JsonObjectRequest req = new JsonObjectRequest(urrr,null,
+                new Response.Listener<JSONObject>() {
                     @Override
-                    public void onResponse(String response) {
-                        Toast.makeText(getContext(),response,Toast.LENGTH_LONG).show();
+                    public void onResponse(JSONObject response) {
+                        Log.d("Reps", response.toString());
+
+                        try {
+
+
+
+
+                            if(Integer.parseInt(response.getString("value"))<=5)
+                            {
+                                Fragment fragment;
+                                fragment=new register();
+                                Bundle data= new Bundle();
+                                data.putString("postcode",dest);
+                                fragment .setArguments(data);
+
+
+                                FragmentTransaction transaction = ((FragmentActivity)getContext()).getSupportFragmentManager().beginTransaction();
+                                transaction.replace(R.id.r, fragment);
+                                transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+                                transaction.addToBackStack(null);
+                                transaction.commit();
+                            }
+                            else
+                            {Toast.makeText(getContext(),
+                                        "Out of range of Shop",
+                                        Toast.LENGTH_LONG).show();}
+
+
+
+
+
+
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(getContext(),
+                                    "Error: " + e.getMessage(),
+                                    Toast.LENGTH_LONG).show();
+                        }
+
+
                     }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        error.printStackTrace();
-                        Toast.makeText(getContext(),error.toString(),Toast.LENGTH_LONG).show();
-                    }
-                }){
+                }, new Response.ErrorListener() {
             @Override
-            protected Map<String,String> getParams(){
-                Map<String,String> params = new HashMap<String, String>();
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d("Resp", "Error: " + error.getMessage());
+                Toast.makeText(getContext(),
+                        error.getMessage(), Toast.LENGTH_SHORT).show();
 
-                params.put(KEY_PASSWORD,password);
-                params.put(KEY_ADDRESS,addr);
-                params.put(KEY_CONTACT,cont);
-                params.put(KEY_NAME,name);
-                params.put(KEY_ORDER,orders);
-                return params;
             }
+        });
 
-        };
+        // Adding request to request queue
+        AppController.getInstance().addToRequestQueue(req);
 
-        RequestQueue requestQueue = Volley.newRequestQueue(getContext());
-        Log.e("post",stringRequest+"");
-        requestQueue.add(stringRequest);
+
+
+
+
+
     }
 
 
@@ -199,11 +241,10 @@ return v;
 
 
                             SessionUpdate(response.getString("contact"),
-                                    response.getString("name"),response.getString("address"),response.getString("password"));
+                                    response.getString("name"),response.getString("address"));
 
 
-
-
+                          Trans();
 
 
 
@@ -233,17 +274,42 @@ return v;
 
     }
 
-public void SessionUpdate(String contact,String name,String address,String password)
+public void SessionUpdate(String contact,String name,String address)
 {
     SharedPreferences pref = getContext().getSharedPreferences("session", 0); // 0 - for private mode
     SharedPreferences.Editor editor = pref.edit();
     editor.putString("status", "logged");
     editor.putString("contact", contact);
     editor.putString("address", address);
-    editor.putString("password", password);
     editor.putString("name",name);
     editor.apply();
     Log.e("dsds",pref.getString("status",null)+"");
+
+
+}
+
+
+
+
+
+
+
+
+public void Trans()
+{
+    Fragment fragment;
+    fragment=new SettingsFrag();
+    Bundle data= new Bundle();
+    fragment .setArguments(data);
+
+    FragmentTransaction transaction = ((FragmentActivity)getContext()
+    ).getSupportFragmentManager().beginTransaction();
+    transaction.replace(R.id.r, fragment);
+
+    transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+    transaction.addToBackStack("name");
+    transaction.commit();
+
 
 
 }

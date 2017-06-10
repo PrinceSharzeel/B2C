@@ -62,13 +62,10 @@ public class ProductDetailFrag  extends Fragment{
         unit=(TextView)view.findViewById(R.id.desc);
         thumbnail=(ImageView)view.findViewById(R.id.thumbnail);
         add=(Button)view.findViewById(R.id.add);
-        max=(TextView)view.findViewById(R.id.max);
         discount=(TextView)view.findViewById(R.id.discount);
         discper=(TextView)view.findViewById(R.id.discper);
         discexp=(TextView)view.findViewById(R.id.discexp);
 
-        min=(TextView)view.findViewById(R.id.min);
-        extra=(TextView)view.findViewById(R.id.extra);
         brand=(TextView)view.findViewById(R.id.brand);
         disc=(TextView)view.findViewById(R.id.disc);
 
@@ -80,7 +77,7 @@ public class ProductDetailFrag  extends Fragment{
 
 
 
-        JsonArrayRequest req = new JsonArrayRequest(urlJsonArry,
+                JsonArrayRequest req = new JsonArrayRequest(urlJsonArry,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
@@ -96,18 +93,15 @@ public class ProductDetailFrag  extends Fragment{
                             title.setText(name);price.setText(email);
                             weight.setText(person.getString("pweight")+" kg");
                             unit.setText(person.getString("punit")+" p/gm");
-                            disc.setText(person.getString("pdisc"));
                             Log.e("imageew","http://192.168.43.227:8000");
-                            Picasso.with(getContext()).load("http://192.168.43.227:8000"+person.getString("ppro")
+                            Picasso.with(getContext()).load("http:/\n" +
+                                    "                            disc.setText(person.getString(\"pdisc\"));/192.168.43.227:8000"+person.getString("ppro")
                             ).into(thumbnail);
-                            max.setText("Max : "+person.getString("pmax"));
-                            min.setText("Min : "+person.getString("pmin"));
                             brand.setText(person.getString("pbrand"));
                             discper.setText("Discount "+person.getString("pdisc")+" %");
                             discexp.setText("Till: "+person.getString("pexp"));
 
 
-                            extra.setText("Package :"+person.getString("package")+"    Units Available: "+person.getString("punit")+"\n");
 
                             long a= Integer.parseInt(person.getString("preddisc"));
                             a=Integer.parseInt(person.getString("price"))+a;

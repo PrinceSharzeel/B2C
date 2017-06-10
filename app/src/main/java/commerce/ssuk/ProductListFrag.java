@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -44,7 +45,7 @@ import static commerce.ssuk.AppController.getInstance;
 public class ProductListFrag  extends Fragment {
     private RecyclerView recyclerView;
     private ProductAdapter adapter;
-    private List<Item> albumList;
+    private List<Orders> albumList;
     Context context;
     private static String urlJsonArry = "http://192.168.43.227:8000/api/products/";
 
@@ -82,7 +83,7 @@ public class ProductListFrag  extends Fragment {
                 final DBAdapter db = new DBAdapter(getContext());
                 try {
                     db.open();
-                    db.insertCart(albumList.get(position).getName() + "", albumList.get(position).getNumOfSongs() + "");
+                    db.insertCart(albumList.get(position).getName() + "", albumList.get(position).getPrice() + "");
 
                     Toast.makeText(getActivity(), "Inserted",
                             Toast.LENGTH_SHORT).show();
@@ -147,10 +148,21 @@ public class ProductListFrag  extends Fragment {
                                         .get(i);
 
                                 String name = person.getString("ptitle");
-                                String email = person.getString("price");
+                                String price = person.getString("price");
 
-                                Item a=new Item(name,email,R.drawable.bg);
-                                albumList.add(a);
+                                String weight = person.getString("pweight");
+
+                                String litre = person.getString("plitres");
+
+                                String prof = person.getString("ppro");
+
+                                long a= Integer.parseInt(person.getString("preddisc"));
+                                a=Integer.parseInt(person.getString("price"))+a;
+                                String redprice=a+"";
+
+
+                                Orders prod=new Orders(name,price,prof,weight+" gm| "+litre,redprice);
+                                albumList.add(prod);
                                 Log.e("resultsuij",name);
 
                                 adapter.notifyDataSetChanged();
