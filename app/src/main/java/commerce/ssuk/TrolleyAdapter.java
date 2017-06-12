@@ -47,12 +47,7 @@ public class TrolleyAdapter extends RecyclerView.Adapter<TrolleyAdapter.MyViewHo
             thumbnail = (ImageView) view.findViewById(R.id.thumbnail);
             add=(Button) view.findViewById(R.id.add);
             close=(ImageButton)view.findViewById(R.id.close);
-            add.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onClickListener.AddCartViewOnClick(v, getAdapterPosition());
-                }
-            });
+
 
         }
 
@@ -92,6 +87,7 @@ public class TrolleyAdapter extends RecyclerView.Adapter<TrolleyAdapter.MyViewHo
         holder.count.setText(album.getNumOfSongs());
 //Log.e(album.getName()+'');
         // loading album cover using Glide library
+//        Log.e("urrr",album.getThumbnail());
         Picasso.with(mContext).load("http://192.168.43.227:8000"+album.getThumbnail()).into(holder.thumbnail);
         holder.thumbnail.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -123,6 +119,8 @@ public class TrolleyAdapter extends RecyclerView.Adapter<TrolleyAdapter.MyViewHo
         });
 
 
+        holder.add.setText(album.getQuant());
+
 
     }
 
@@ -136,7 +134,7 @@ public class TrolleyAdapter extends RecyclerView.Adapter<TrolleyAdapter.MyViewHo
 
     public interface MyAdapterListener {
 
-        void AddCartViewOnClick(View v, int position);
+        void AddCartViewOnClick(View v, int position,String a);
     }
 
 
@@ -144,17 +142,18 @@ public class TrolleyAdapter extends RecyclerView.Adapter<TrolleyAdapter.MyViewHo
 
 
 class Orders {
-    private String name,price,pro,disc,redprice;
+    private String name,price,pro,disc,redprice,units;
     public Orders() {
     }
 
-    public Orders(String name,String price,String pro,String disc,String redprice) {
+    public Orders(String name,String price,String pro,String disc,String redprice,String units) {
         this.name = name;
 
         this.pro= pro;
         this.price =price;
         this.disc=disc;
         this.redprice=redprice;
+        this.units=units;
     }
 
     public String getName() {
@@ -202,6 +201,15 @@ class Orders {
     public void setRedprice(String redprice) {
         this.redprice =redprice;
     }
+    public String getUnits() {
+        return units;
+    }
+
+    public void setUnits(String units) {
+        this.units = units;
+    }
+
+
 
 
 

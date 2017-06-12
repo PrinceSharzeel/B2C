@@ -50,7 +50,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
             thumbnail = (ImageView) view.findViewById(R.id.thumbnail);
             add=(Button) view.findViewById(R.id.add);
 
-
+/*
             add.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -58,7 +58,42 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
 
 
                 }
-            });
+            });  */
+
+
+            add.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(final View v) {
+                    //Creating the instance of PopupMenu
+                    PopupMenu popup = new PopupMenu(mContext,add);
+                    //Inflating the Popup using xml file
+
+                    popup.getMenuInflater()
+                            .inflate(R.menu.popup_menu, popup.getMenu());
+
+                    //registering popup with OnMenuItemClickListener
+                    popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        public boolean onMenuItemClick(MenuItem item) {
+
+                            onClickListener.AddCartViewOnClick(v, getAdapterPosition(),item.getTitle()+"");
+                            add.setText(item.getTitle());
+
+                            return true;
+                        }
+                    });
+
+                    popup.show(); //showing popup menu
+                }
+            }); //closing the setOnClickListener method
+
+
+
+
+
+
+
+
+
 
             }
 
@@ -76,9 +111,10 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
         this.albumList = albumList;
     }
 
-    public ProductAdapter(List<Orders> albumList, MyAdapterListener listener) {
+    public ProductAdapter(Context mContext,List<Orders> albumList, MyAdapterListener listener) {
 
-       this.albumList=albumList;
+        this.mContext = mContext;
+        this.albumList=albumList;
         onClickListener = listener;
     }
 
@@ -121,6 +157,11 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
 
 
 
+
+
+
+
+
     }
 
 
@@ -133,7 +174,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
 
     public interface MyAdapterListener {
 
-        void AddCartViewOnClick(View v, int position);
+        void AddCartViewOnClick(View v, int position,String a);
     }
 
 

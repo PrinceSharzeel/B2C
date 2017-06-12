@@ -20,6 +20,7 @@
         <activity android:name=".ProductDetail" />
 
         <activity android:name=".prod_view" />
+        <activity android:name=".CheckOutFrag" />
         <activity
             android:name=".SplashScreen"
             android:label="@string/app_name"

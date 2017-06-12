@@ -25,8 +25,6 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -37,6 +35,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by princes on 24-May-17.
@@ -63,6 +63,8 @@ public class register  extends Fragment{
     public static final String KEY_CONTACT = "contact";
 
     public static final String KEY_ORDER = "orders";
+
+    public static final String KEY_EMAIL = "email";
 
     public static final String KEY_NAME = "name";
     private String repassword,password,name,adder,cont,postcode,orders;
@@ -95,8 +97,21 @@ nam=(EditText)v.findViewById(R.id.name);
         reg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(pswd.getText().toString().trim().equals(repswd.getText().toString().trim()))
-                {RegisterUser();}
+                if(pswd.getText().toString().trim().equals(repswd.getText().toString().trim())) {
+
+                    String addrs = contact.getText().toString();
+                    Pattern pattern = Pattern.compile("^(((\\s44\\s?\\d{4}|\\(?0\\d{4}\\)?)\\s?\\d{3}\\s?\\d{3})|((\\+44\\s?\\d{3}|\\(?0\\d{3}\\)?)\\s?\\d{3}\\s?\\d{4})|((\\+44\\s?\\d{2}|\\(?0\\d{2}\\)?)\\s?\\d{4}\\s?\\d{4}))(\\s?\\#(\\d{4}|\\d{3}))?$");
+                    Matcher matcher = pattern.matcher(addrs);
+
+                    if (matcher.matches()) {
+                        Log.e("valid", "Phone Number Valid");
+                        RegisterUser();
+                    } else {
+                        Toast.makeText(getContext(),"Invalid Contact",Toast.LENGTH_LONG).show();
+                    }
+                }
+
+
                 else Toast.makeText(getContext(),"Password mismatch",Toast.LENGTH_LONG).show();
             }
         });
@@ -140,6 +155,7 @@ card1.setVisibility(View.GONE);
         adder= "wdscscw";
         cont=contact.getText().toString().trim();
         orders="1";
+        final String mail="a@b.com";
 
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, REGISTER_URL,
@@ -182,6 +198,7 @@ card1.setVisibility(View.GONE);
                 params.put(KEY_NAME,name);
                 params.put(KEY_ORDER,orders);
                 params.put(KEY_POSTCODE,postcode);
+                params.put(KEY_EMAIL,mail);
                 return params;
             }
 
@@ -207,6 +224,7 @@ card1.setVisibility(View.GONE);
 
         name=nam.getText().toString().trim();
         adder= address.getText().toString().trim();
+        final String mail="a@b.com";
 
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, FINAL_REGISTER_URL,
@@ -247,6 +265,8 @@ card1.setVisibility(View.GONE);
                 params.put(KEY_NAME,name);
                 params.put(KEY_ORDER,orders);
                 params.put(KEY_POSTCODE,postcode);
+
+                params.put(KEY_EMAIL,mail);
                 return params;
             }
 

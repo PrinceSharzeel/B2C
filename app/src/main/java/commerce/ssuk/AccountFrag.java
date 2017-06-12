@@ -29,7 +29,6 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.gson.JsonObject;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -220,6 +219,7 @@ try {
 
     private void LogUser(){
         final String contact = usrlogin.getText().toString().trim();
+
         final String password = pswdlogin.getText().toString().trim();
 
 
@@ -234,17 +234,24 @@ try {
 
                            // JSONObject userObject = new JSONObject(response.toString());
                             Log.d("Reps", response.toString());
-
+                            if((response.getString("name")).equals("Check username or password"))
+                            {
+                                Toast.makeText(getContext(),
+                                        response.getString("name"),
+                                        Toast.LENGTH_LONG).show();
+                                return;
+                            }
+                            else{
                             Toast.makeText(getContext(),
                                     "Successfully Logged In",
                                     Toast.LENGTH_LONG).show();
 
 
                             SessionUpdate(response.getString("contact"),
-                                    response.getString("name"),response.getString("address"));
+                                    response.getString("name"),response.getString("address"),response.getString("password"));
 
 
-                          Trans();
+                          Trans();}
 
 
 
@@ -274,14 +281,14 @@ try {
 
     }
 
-public void SessionUpdate(String contact,String name,String address)
+public void SessionUpdate(String contact,String name,String address,String password)
 {
     SharedPreferences pref = getContext().getSharedPreferences("session", 0); // 0 - for private mode
     SharedPreferences.Editor editor = pref.edit();
     editor.putString("status", "logged");
     editor.putString("contact", contact);
     editor.putString("address", address);
-    editor.putString("name",name);
+    editor.putString("name",name);editor.putString("password",password);
     editor.apply();
     Log.e("dsds",pref.getString("status",null)+"");
 

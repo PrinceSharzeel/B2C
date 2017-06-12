@@ -16,13 +16,15 @@ public class DBAdapter {
     public static final String KEY_ROWID = "_id";
     public static final String KEY_NAME = "name";
     public static final String KEY_EMAIL = "email";
+
+    public static final String KEY_QUANTITY= "quantity";
     private static final String TAG = "DBAdapter";
     private static final String DATABASE_NAME = "SSUK";
     private static final String DATABASE_TABLE = "Cart";
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_CREATE =
             "create table Cart (_id integer primary key autoincrement, "
-                    + "name text not null, email text not null);";
+                    + "name text,email text not null,quantity integer not null);";
     private final Context context;
     private DatabaseHelper DBHelper;
     private SQLiteDatabase db;
@@ -82,11 +84,12 @@ public class DBAdapter {
 
 
     //---insert a contact into the database---
-    public long insertCart(String name, String email)
+    public long insertCart(String name, String email,String quantiy)
     {
         ContentValues initialValues = new ContentValues();
         initialValues.put(KEY_NAME, name);
         initialValues.put(KEY_EMAIL, email);
+        initialValues.put(KEY_QUANTITY,quantiy);
         return db.insert(DATABASE_TABLE, null, initialValues);
     }
 
@@ -109,21 +112,24 @@ public class DBAdapter {
     public Cursor getAllCart
     ()
     {
-        return db.query(DATABASE_TABLE, new String[] {KEY_ROWID, KEY_NAME,KEY_EMAIL},
-                null, null, null, null, null);
+        return db.query(DATABASE_TABLE, new String[] {KEY_ROWID, KEY_NAME,KEY_EMAIL,KEY_QUANTITY},
+                null, null, null, null, null,null);
     }
 
 
     //---retrieves a particular contact---
-    public Cursor getContact(long rowId) throws SQLException
+    public String checkItem(String name) throws SQLException
     {
-        Cursor mCursor =db.query(true, DATABASE_TABLE, new String[] {KEY_ROWID,
-                        KEY_NAME, KEY_EMAIL}, KEY_ROWID + "=" + rowId, null,
-                null, null, null, null);
-        if (mCursor != null) {
-            mCursor.moveToFirst();
-        }
-        return mCursor;
+
+        String query = "select * from Cart where name=\""+ name + "\"";
+
+        Cursor cs =db.rawQuery(query, null);
+        if(cs.getCount()<=0){Log.e("newnull","cursornull");cs.close();  return "true";}
+         cs.moveToFirst();
+        String a=cs.getString(3);
+        cs.close();
+        return a;
+
     }
 
 /*
@@ -146,19 +152,20 @@ public class DBAdapter {
 
 
     //---updates a contact---
-    public boolean updateContact(long rowId, String name, String email)
+    public boolean updateCart(String name,String quantity)
     {
         ContentValues args = new ContentValues();
-        args.put(KEY_NAME, name);
-        args.put(KEY_EMAIL, email);
-        return db.update(DATABASE_TABLE, args, KEY_ROWID + "=" + rowId, null) > 0;
+
+
+        args.put(KEY_QUANTITY, quantity);
+        return db.update(DATABASE_TABLE, args, KEY_NAME +"='" + name+"'", null) > 0;
     }
 
 
     public int NumberOfItems()
     {  int i=0; try{
-        Cursor c = db.query(DATABASE_TABLE, new String[] {KEY_ROWID, KEY_NAME,KEY_EMAIL},
-                null, null, null, null, null);
+        Cursor c = db.query(DATABASE_TABLE, new String[] {KEY_ROWID, KEY_NAME,KEY_EMAIL,KEY_QUANTITY},
+                null, null, null, null, null,null);
 
         if (c.moveToFirst())
         {

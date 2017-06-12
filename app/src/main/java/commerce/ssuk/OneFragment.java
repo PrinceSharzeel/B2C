@@ -32,10 +32,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.squareup.picasso.Picasso;
-import com.synnapps.carouselview.CarouselView;
-import com.synnapps.carouselview.ImageListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +42,7 @@ public class OneFragment extends Fragment{
     private static String urlJsonArry = "http://192.168.43.227:8000/api/products";
     private static String TAG = MainActivity.class.getSimpleName();
     private static ProgressDialog pDialog;private RecyclerView recyclerView;
-    private ProductAdapter adapter;private List<Item> albumList; CarouselView carouselView;
+    private ProductAdapter adapter;private List<Item> albumList;
     int[] sampleImages = {R.drawable.car1, R.drawable.car2,R.drawable.car3};
     Context context; private ImageView trans;
 

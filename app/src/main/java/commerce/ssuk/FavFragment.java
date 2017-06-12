@@ -22,8 +22,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.squareup.picasso.Picasso;
-import com.synnapps.carouselview.CarouselView;
-import com.synnapps.carouselview.ImageListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -32,7 +30,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import retrofit2.http.OPTIONS;
 
 
 public class FavFragment extends Fragment{
@@ -131,9 +128,7 @@ getActivity().invalidateOptionsMenu();
 
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(context,
-                                    "Error: " + e.getMessage(),
-                                    Toast.LENGTH_LONG).show();
+
                         }
 
 
@@ -147,6 +142,7 @@ getActivity().invalidateOptionsMenu();
 
             }
         });
+
 
         // Adding request to request queue
         AppController.getInstance().addToRequestQueue(req);
