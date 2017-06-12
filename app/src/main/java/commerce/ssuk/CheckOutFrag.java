@@ -34,7 +34,7 @@ public class CheckOutFrag extends AppCompatActivity implements
             @Override
             public void onClick(View v) {
                 finish();
-            }
+            }d
         });
 
         btnDatePicker=(Button)findViewById(R.id.btn_date);
