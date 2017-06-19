@@ -1,6 +1,9 @@
 package commerce.ssuk;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Paint;
@@ -8,6 +11,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,6 +22,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,6 +41,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import static commerce.ssuk.AppController.Global_Contact;
 import static commerce.ssuk.AppController.TAG;
 
 /**
@@ -46,27 +52,55 @@ public class OrderFrag  extends Fragment{
     private TrolleyAdapter adapter;
     private List<Item> albumList;
     private Button empty;
-    private TextView pr;
+    private TextView pr,dl,vt,to;
     public static String profilepic;
     private Button checkout,checkoutt;
     private LinearLayout invoice;
    private  String value;
-    long price,delivery,total,savings;
+   float price=0,delivery=0,total,vat=0,red=0,p=0;
+
 
     private static String urlJsonArry ="http://192.168.43.227:8000/api/prod_detail/";
+
+    private static String urldel ="http://192.168.43.227:8000/api/delvat/";
     public void OrderFrag(){}
 
 
 
 
     @Override
-    public void onCreate(Bundle savedInstanceState){super.onCreate(savedInstanceState);}
+    public void onCreate(Bundle savedInstanceState){super.onCreate(savedInstanceState);
+
+Masker ob=new Masker();
+
+   if(AppController.popcount==0&&ob.LoginCheck(getActivity())) {
+
+       AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.InvitationDialog);
+
+       builder.setTitle("Trolley Session");
+       builder.setMessage("Record of trolley items will be maintained for 3 days only.You need to order within it.");
+       builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+
+           public void onClick(DialogInterface dialog, int which) {
+               // Do nothing but close the dialog
+
+               dialog.dismiss();
+           }
+       });
+       AlertDialog alert = builder.create();
+       alert.show();
+       AppController.popcount=1;
+   }
+
+
+
+
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState){
-        View view=inflater.inflate(R.layout.trolley,container,false);
+        final View view=inflater.inflate(R.layout.trolley,container,false);
         albumList = new ArrayList<>();
-        adapter = new TrolleyAdapter(getContext(), albumList);
         empty =(Button)view.findViewById(R.id.testbutton);
         checkout =(Button)view.findViewById(R.id.cancelButton);
         invoice =(LinearLayout) view.findViewById(R.id.invoice);
@@ -75,23 +109,77 @@ public class OrderFrag  extends Fragment{
         RecyclerView.LayoutManager mLayoutmanager=new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(mLayoutmanager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
+
+
+        adapter = new TrolleyAdapter(getContext(),albumList, new TrolleyAdapter.MyAdapterListener() {
+            @Override
+            public void AddCartViewOnClick(final View v, final int position) {
+
+               red= Float.parseFloat(albumList.get(position).getNumOfSongs().substring(2));
+                Log.e("###########3######",red+"");
+                if(red!=0)
+                {
+                    Log.e("#####232323###",price+"");
+                    price=price-red;
+                    Log.e("########rfwef3######",price+"");
+                    pr.setText("Price : € "+price+"");
+                    if(adapter.getItemCount()>0)
+                    {delvat("58e32243eaf87011c22bc744",red);}
+                    else{
+                        pr.setText("Price :");
+                        dl.setText("Delivery Charge :");
+                        vt.setText("VAT :");
+                        to.setText("Total :");
+                        price=0;
+                        total=0;
+
+                    }
+
+
+
+                }
+
+
+            }
+
+        });
+
+
+
+
+
         recyclerView.setAdapter(adapter);
+
+
         pr=(TextView) view.findViewById(R.id.price);
+
+        dl=(TextView) view.findViewById(R.id.delivery);
+
+        vt=(TextView) view.findViewById(R.id.vat);
+
+        to=(TextView) view.findViewById(R.id.total);
         getActivity().invalidateOptionsMenu();
+
+
+
+
+
 
 
         try{
         final DBAdapter db = new DBAdapter(getContext());
         db.open();
-        Cursor c = db.getAllCart();
+        Cursor c = db.getAllCart(AppController.Global_Contact);
             price=0;
 
             int i=0;
         if (c.moveToFirst())
         {
             do {
+
                  ParsePic(c.getString(1));
-                int cost=Integer.parseInt(c.getString(2))*Integer.parseInt(c.getString(3));
+                Float cost=Float.parseFloat(c.getString(2))*Float.parseFloat(c.getString(3));
+                Log.e("time",c.getString(5));
 
                 Item it =new Item(c.getString(1),"€ "+cost,profilepic,c.getString(3));
                 price=price+cost;
@@ -118,28 +206,70 @@ public class OrderFrag  extends Fragment{
             public void onClick(View v) {
 
                 getActivity().invalidateOptionsMenu();
+                pr.setText("Price :");
+                dl.setText("Delivery Charge : € 0");
+                vt.setText("VAT :");
+                to.setText("Total :");
+
+                price=0;
+                total=0;
 
                 EmptyTrolley(); albumList = new ArrayList<>();
                 adapter = new TrolleyAdapter(getContext(), albumList);recyclerView.setAdapter(adapter);
             }
         });
 
+        Log.e("va",delivery+"/"+vat);
+          if(adapter.getItemCount()>0)
+          {delvat("58e32243eaf87011c22bc744",0);}
 
+        Log.e("val",delivery+"/"+vat);
         pr.setText("Price : € "+price+"");
 
 
-
-
-
-
+        final SharedPreferences pref =getContext().getSharedPreferences("session",0);
 
 
 
         checkout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              Intent in = new Intent(getContext(),CheckOutFrag.class);
-                startActivity(in);
+
+
+                if(pref.contains("status")) {
+
+
+
+                    if(pref.getString("status",null).equals("logged")) {
+
+
+                                if (price < 40.00) {
+                                    Toast.makeText(getContext(),
+                                            "Minimum order should be of 40 €",
+                                            Toast.LENGTH_SHORT).show();
+                                    return;
+                                }
+                                Log.e("delivery",delivery+"");
+                                Intent in = new Intent(getContext(), CheckOutFrag.class).putExtra("delivery",delivery+"");
+                                startActivity(in);
+
+
+                    }
+                    else
+                    { ViewPager viewPager = (ViewPager) getActivity().findViewById(
+                            R.id.viewpager);
+                        viewPager.setCurrentItem(4);
+
+                    }
+
+
+                }
+                else
+                {
+                    ViewPager viewPager = (ViewPager) getActivity().findViewById(
+                            R.id.viewpager);
+                    viewPager.setCurrentItem(4);
+                }
 
 
             }
@@ -173,7 +303,7 @@ public class OrderFrag  extends Fragment{
   {
       final DBAdapter db = new DBAdapter(getContext());
       db.open();
-      db.deleteAllItems();
+      db.deleteAllItems(AppController.Global_Contact);
       Toast.makeText(getActivity(), "Trolley Emptied",Toast.LENGTH_SHORT).show();
       db.close();
 
@@ -184,22 +314,31 @@ public class OrderFrag  extends Fragment{
 
 
 
-  public  void ParsePic(final String value)
+  public  void delvat(final String value,float reduct)
   {
 
 
-      JsonArrayRequest req = new JsonArrayRequest(urlJsonArry+value,
-              new Response.Listener<JSONArray>() {
+      JsonObjectRequest req = new JsonObjectRequest(urldel+value,null,
+              new Response.Listener<JSONObject>() {
                   @Override
-                  public void onResponse(JSONArray response) {
+                  public void onResponse(JSONObject response) {
                       Log.d("Reps", response.toString());
 
                       try {
 
-                          final JSONObject person = (JSONObject) response
-                                  .get(0);
 
-                          profilepic = person.getString("ppro");
+
+                          delivery = Long.parseLong(response.getString("del_char"));
+                         vat = Long.parseLong(response.getString("vat"));
+
+                          Log.e("valeeee",delivery+"/"+vat);
+                          dl.setText("Delivery Charge : € 0");
+                          vt.setText("VAT : "+vat+" %");
+                          p=price;
+                          vat=p*vat/100;
+                          p=vat+p;
+                          p=p+delivery;
+                          to.setText("Total : € "+p);
 
 
 
@@ -230,13 +369,59 @@ public class OrderFrag  extends Fragment{
 
 
 
-
-
-
-
-
   }
 
+
+
+
+
+    public  void ParsePic(final String value)
+    {
+
+
+        JsonArrayRequest req = new JsonArrayRequest(urlJsonArry+value,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        Log.d("Reps", response.toString());
+
+                        try {
+
+                            final JSONObject person = (JSONObject) response
+                                    .get(0);
+
+                            profilepic = person.getString("ppro");
+
+
+
+
+
+
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(getContext(),
+                                    "Error: " + e.getMessage(),
+                                    Toast.LENGTH_LONG).show();
+                        }
+
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d("Resp", "Error: " + error.getMessage());
+                Toast.makeText(getContext(),
+                        error.getMessage(), Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+        AppController.getInstance().addToRequestQueue(req);
+
+
+
+    }
 
 
 

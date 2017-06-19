@@ -1,6 +1,8 @@
 package commerce.ssuk;
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -52,10 +54,26 @@ public class HomActivity extends AppCompatActivity {
             R.drawable.ic_account_balance_wallet_black_24dp,
     };
 
+
+
+    Intent mServiceIntent;
+    private SensorService mSensorService;
+    Context ctx;
+    public Context getCtx() {
+        return ctx;
+    }
+
+
+
+
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hom);
+        ctx = this;
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         mcontext=this;
@@ -64,6 +82,21 @@ public class HomActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
     String imageURL="https://www.dg.uk/wp-content/themes/dg%20placeholder/img/logo.png";
+
+
+        Log.i ("Globaaaaaaaaaaal", AppController.Global_Contact+"");
+
+
+
+
+        mSensorService = new SensorService(getCtx());
+        mServiceIntent = new Intent(getCtx(), mSensorService.getClass());
+        if (!isMyServiceRunning(mSensorService.getClass())) {
+            startService(mServiceIntent);
+        }
+
+
+
 
         final ActionBar ab = getSupportActionBar();
         Picasso.with(this)
@@ -95,6 +128,9 @@ public class HomActivity extends AppCompatActivity {
         db.close();
 
 
+        Session();
+
+
 
 
 
@@ -107,6 +143,34 @@ public class HomActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
         setupTabIcons();
     }
+
+
+
+
+
+    private boolean isMyServiceRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                Log.i ("isMyServiceRunning?", true+"");
+                return true;
+            }
+        }
+        Log.i ("isMyServiceRunning?", false+"");
+        return false;
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        stopService(mServiceIntent);
+        Log.i("MAINACT", "onDestroy!");
+        super.onDestroy();
+
+    }
+
+
+
     private void setupTabIcons() {
         tabLayout.getTabAt(0).setIcon(tabIcons[0]);
         tabLayout.getTabAt(1).setIcon(tabIcons[1]);
@@ -168,8 +232,8 @@ public class HomActivity extends AppCompatActivity {
         MenuItem menuItem = menu.findItem(R.id.testAction);
         final DBAdapter db=new DBAdapter(getApplicationContext());
         db.open();
-        Log.e("NUmber",db.NumberOfItems()+"");
-        menuItem.setIcon(buildCounterDrawable(db.NumberOfItems(),  R.drawable.searchtrolley));
+        Log.e("NUmber",db.NumberOfItems(AppController.Global_Contact)+"");
+        menuItem.setIcon(buildCounterDrawable(db.NumberOfItems(AppController.Global_Contact),  R.drawable.searchtrolley));
         db.close();
         return super.onCreateOptionsMenu(menu);
     }
@@ -219,6 +283,30 @@ public class HomActivity extends AppCompatActivity {
         view.setDrawingCacheEnabled(false);
 
         return new BitmapDrawable(getResources(), bitmap);
+    }
+
+
+
+
+
+
+
+    public void Session()
+    {
+
+        SharedPreferences pref=getApplication().getSharedPreferences("session",0);
+        Log.e("LOLOLOLOX",pref.getString("status",null)+"");
+        if(!pref.contains("status"))
+        {
+            SharedPreferences.Editor editor = pref.edit();
+            editor.putString("status","loggedout");
+            editor.apply();
+            Log.e("LOLOLOLO",pref.getString("status",null)+"");
+
+        }
+
+
+
     }
 
 

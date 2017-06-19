@@ -48,6 +48,13 @@ public class TrolleyAdapter extends RecyclerView.Adapter<TrolleyAdapter.MyViewHo
             add=(Button) view.findViewById(R.id.add);
             close=(ImageButton)view.findViewById(R.id.close);
 
+            add=(Button) view.findViewById(R.id.add);
+
+
+
+
+
+
 
         }
 
@@ -65,12 +72,13 @@ public class TrolleyAdapter extends RecyclerView.Adapter<TrolleyAdapter.MyViewHo
         this.albumList = albumList;
     }
 
-    public TrolleyAdapter(List<Item> albumList, MyAdapterListener listener) {
+    public TrolleyAdapter(Context mContext,List<Item> albumList, MyAdapterListener listener) {
 
         this.albumList=albumList;
         onClickListener = listener;
-    }
+        this.mContext = mContext;
 
+    }
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -105,15 +113,19 @@ public class TrolleyAdapter extends RecyclerView.Adapter<TrolleyAdapter.MyViewHo
 
                 final DBAdapter db=new DBAdapter(v.getContext());
                 db.open();
-                db.deleteContact(album.getName());
+                db.deleteContact(album.getName(),AppController.Global_Contact);
                 Toast.makeText(mContext, "Item deleted",
                         Toast.LENGTH_SHORT).show();
                 db.close();
                 ((HomActivity)mContext).invalidateOptionsMenu();
+                onClickListener.AddCartViewOnClick(v, position);
+                Log.e("dbaao","haan");
+
 
                 albumList.remove(position);
                 notifyItemRemoved(position);
                 notifyItemRangeChanged(position, albumList.size());
+
 
             }
         });
@@ -134,7 +146,7 @@ public class TrolleyAdapter extends RecyclerView.Adapter<TrolleyAdapter.MyViewHo
 
     public interface MyAdapterListener {
 
-        void AddCartViewOnClick(View v, int position,String a);
+        void AddCartViewOnClick(View v, int position);
     }
 
 

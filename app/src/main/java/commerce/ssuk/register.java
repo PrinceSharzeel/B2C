@@ -48,7 +48,7 @@ public class register  extends Fragment{
     private Button empty;
     private Button sign,reg,regfinal;
     private LinearLayout invoice;
-    private TextView rep;
+    private TextView error;
     private EditText repswd,pswd,contact,nam,address;
     private CardView card,card1;
 
@@ -93,26 +93,49 @@ postcode=getArguments().getString("postcode");
         card1=(CardView)v.findViewById(R.id.card_view1);address=(EditText)v.findViewById(R.id.address);
 nam=(EditText)v.findViewById(R.id.name);
  regfinal=(Button)v.findViewById(R.id.regfinal);
-
+error=(TextView)v.findViewById(R.id.error);
+        error.setVisibility(View.GONE);
         reg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                Masker ob =new Masker();
+
+
+
+
                 if(pswd.getText().toString().trim().equals(repswd.getText().toString().trim())) {
 
                     String addrs = contact.getText().toString();
-                    Pattern pattern = Pattern.compile("^(((\\s44\\s?\\d{4}|\\(?0\\d{4}\\)?)\\s?\\d{3}\\s?\\d{3})|((\\+44\\s?\\d{3}|\\(?0\\d{3}\\)?)\\s?\\d{3}\\s?\\d{4})|((\\+44\\s?\\d{2}|\\(?0\\d{2}\\)?)\\s?\\d{4}\\s?\\d{4}))(\\s?\\#(\\d{4}|\\d{3}))?$");
-                    Matcher matcher = pattern.matcher(addrs);
-
-                    if (matcher.matches()) {
+                    String regexStr = "^[0-9]{11}$";
+                    if(addrs.matches(regexStr))
+                    {
                         Log.e("valid", "Phone Number Valid");
-                        RegisterUser();
+
+
+
+                        if(ob.passwordValidation(pswd.getText().toString().trim()))
+                        { RegisterUser();}
+                        else
+                        { Toast.makeText(getContext(),"Invalid password",Toast.LENGTH_SHORT).show();
+                            error.setVisibility(View.VISIBLE);
+                            error.setText("Password should have minimum length of 8 with atleast\n one alphabet,numeral and Special Character");
+
+                        }
+
+
+
+
                     } else {
-                        Toast.makeText(getContext(),"Invalid Contact",Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(),"Invalid Contact",Toast.LENGTH_SHORT).show();
+                        error.setVisibility(View.VISIBLE);
+                        error.setText("UK Contact not found");
                     }
                 }
 
 
-                else Toast.makeText(getContext(),"Password mismatch",Toast.LENGTH_LONG).show();
+                else {  error.setVisibility(View.VISIBLE);
+                    error.setText("Password Mismatch");}
             }
         });
 
@@ -145,6 +168,9 @@ card1.setVisibility(View.GONE);
 
 
     private void RegisterUser(){
+
+
+        error.setVisibility(View.GONE);
        repassword = repswd.getText().toString().trim();
         password = pswd.getText().toString().trim();
 

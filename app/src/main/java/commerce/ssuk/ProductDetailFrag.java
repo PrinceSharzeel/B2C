@@ -119,7 +119,6 @@ public class ProductDetailFrag  extends Fragment{
                                     final DBAdapter db = new DBAdapter(getContext());
                                     try {
                                         db.open();
-                                        db.insertCart(person.getString("ptitle"),person.getString("price"),"a");
 
                                         Toast.makeText(getActivity(), "Added to trolley",
                                                 Toast.LENGTH_SHORT).show();

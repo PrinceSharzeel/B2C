@@ -8,6 +8,7 @@ android {
         applicationId "commerce.ssuk"
         minSdkVersion 14
         targetSdkVersion 25
+        multiDexEnabled = true
         versionCode 1
         versionName "1.0"
     }
@@ -28,6 +29,7 @@ dependencies {
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support:design:25.3.1'
     compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'com.android.support:multidex:1.0.1'
     compile 'com.borax12.materialdaterangepicker:library:1.9'
     compile 'com.android.volley:volley:1.0.0'
     compile 'com.android.support:recyclerview-v7:25.3.1'

@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,7 +51,8 @@ public class AccountFrag  extends Fragment{
     private Button empty;
     private Button sign,reg;
     private LinearLayout invoice;
-    private TextView rep;
+    private TextView error;
+    ProgressBar pb;
     private EditText repswd,pswd,contact,pin,nam,order,addrs,name,usrlogin,pswdlogin;
 
     private static final String pin_url = "http://192.168.43.227:8000/api/postcode/";
@@ -81,7 +83,11 @@ public class AccountFrag  extends Fragment{
         usrlogin=(EditText)v.findViewById(R.id.edit_username0);
         pswdlogin=(EditText)v.findViewById(R.id.pswd0);
         pin=(EditText)v.findViewById(R.id.pin);
+       pb=(ProgressBar)v.findViewById(R.id.progressBar);
 
+        pb.setVisibility(View.GONE);
+        error=(TextView)v.findViewById(R.id.error);
+        error.setVisibility(View.GONE);
 
 
         sign=(Button)v.findViewById(R.id.sign);reg=(Button)v.findViewById(R.id.register);
@@ -90,6 +96,8 @@ public class AccountFrag  extends Fragment{
         sign.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                pb.setVisibility(View.VISIBLE);
+
                 LogUser();
             }
         });
@@ -99,6 +107,8 @@ public class AccountFrag  extends Fragment{
         reg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                pb.setVisibility(View.VISIBLE);
+
 
                 RegisterUser();
             }
@@ -145,66 +155,76 @@ try {
         String urrr=pin_url+origin+"N"+dest;
         Log.e("Urlslfn",urrr);
 
-        JsonObjectRequest req = new JsonObjectRequest(urrr,null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Log.d("Reps", response.toString());
+        Masker ob = new Masker();
+        String res=ob.pincode_mask(dest,getContext());Log.e("Urlslsdfsdfsdffn",res);
 
-                        try {
+        if(ob.pincode_mask(dest,getContext()).equals("false")) {
 
 
+            JsonObjectRequest req = new JsonObjectRequest(urrr, null,
+                    new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            Log.d("Reps", response.toString());
+
+                            pb.setVisibility(View.GONE);
 
 
-                            if(Integer.parseInt(response.getString("value"))<=5)
-                            {
-                                Fragment fragment;
-                                fragment=new register();
-                                Bundle data= new Bundle();
-                                data.putString("postcode",dest);
-                                fragment .setArguments(data);
+                            try {
 
 
-                                FragmentTransaction transaction = ((FragmentActivity)getContext()).getSupportFragmentManager().beginTransaction();
-                                transaction.replace(R.id.r, fragment);
-                                transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-                                transaction.addToBackStack(null);
-                                transaction.commit();
+                                if (Integer.parseInt(response.getString("value")) <= 5) {
+                                    Fragment fragment;
+                                    fragment = new register();
+                                    Bundle data = new Bundle();
+                                    data.putString("postcode", dest);
+                                    fragment.setArguments(data);
+
+
+                                    FragmentTransaction transaction = ((FragmentActivity) getContext()).getSupportFragmentManager().beginTransaction();
+                                    transaction.replace(R.id.r, fragment);
+                                    transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+                                    transaction.addToBackStack(null);
+                                    transaction.commit();
+                                } else {
+                                    Toast.makeText(getContext(),
+                                            "Out of range of Shop",
+                                            Toast.LENGTH_LONG).show();
+                                    error.setVisibility(View.VISIBLE);
+                                    error.setText("Out of range of Shop");
+                                }
+
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                                Toast.makeText(getContext(),
+                                        "Error: " + e.getMessage(),
+                                        Toast.LENGTH_LONG).show();
                             }
-                            else
-                            {Toast.makeText(getContext(),
-                                        "Out of range of Shop",
-                                        Toast.LENGTH_LONG).show();}
 
 
-
-
-
-
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            Toast.makeText(getContext(),
-                                    "Error: " + e.getMessage(),
-                                    Toast.LENGTH_LONG).show();
                         }
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    VolleyLog.d("Resp", "Error: " + error.getMessage());
+                    Toast.makeText(getContext(),
+                            error.getMessage(), Toast.LENGTH_SHORT).show();
 
+                }
+            });
 
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                VolleyLog.d("Resp", "Error: " + error.getMessage());
-                Toast.makeText(getContext(),
-                        error.getMessage(), Toast.LENGTH_SHORT).show();
+            // Adding request to request queue
+            AppController.getInstance().addToRequestQueue(req);
 
-            }
-        });
+        }
+        else
+        {
+            pb.setVisibility(View.GONE);
+            error.setVisibility(View.VISIBLE);
+            error.setText("Postcode not found");
 
-        // Adding request to request queue
-        AppController.getInstance().addToRequestQueue(req);
-
-
+        }
 
 
 
@@ -228,6 +248,8 @@ try {
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.d("Reps", response.toString());
+                        pb.setVisibility(View.GONE);
+
 
                         try {
 
@@ -239,6 +261,8 @@ try {
                                 Toast.makeText(getContext(),
                                         response.getString("name"),
                                         Toast.LENGTH_LONG).show();
+                                error.setVisibility(View.VISIBLE);
+                                error.setText("Check username or password");
                                 return;
                             }
                             else{
@@ -249,7 +273,7 @@ try {
 
                             SessionUpdate(response.getString("contact"),
                                     response.getString("name"),response.getString("address"),response.getString("password"));
-
+                                AppController.Global_Contact=response.getString("contact");
 
                           Trans();}
 
@@ -260,7 +284,9 @@ try {
                             e.printStackTrace();
                             Toast.makeText(getContext(),
                                     "Check Username or Password",
-                                    Toast.LENGTH_LONG).show();
+                                    Toast.LENGTH_LONG).show(); error.setVisibility(View.VISIBLE);
+                            error.setText("Check username or password");
+
                         }
 
 

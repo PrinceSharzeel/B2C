@@ -12,11 +12,13 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
+import android.text.format.Time;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -29,7 +31,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkError;
+import com.android.volley.NoConnectionError;
+import com.android.volley.ParseError;
 import com.android.volley.Response;
+import com.android.volley.ServerError;
+import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonArrayRequest;
@@ -38,7 +46,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import static commerce.ssuk.AppController.TAG;
@@ -74,6 +84,7 @@ public class ProductListFrag  extends Fragment {
         //((AppCompatActivity) getActivity()).getSupportActionBar().setIcon();
         //Recycler
         getActivity().invalidateOptionsMenu();
+        final Masker obj=new Masker();
 
         context=getContext();
         String value = getArguments().getString("category");
@@ -82,69 +93,82 @@ public class ProductListFrag  extends Fragment {
         adapter = new ProductAdapter(context,albumList, new ProductAdapter.MyAdapterListener() {
             @Override
             public void AddCartViewOnClick(final View v, final int position, final String a) {
-                String TAG="Dwdw";
-                Log.d(TAG, "iconTextViewOnClick at position "+position);
-                Log.e("Tag",albumList.get(position).getName()+"");
+                String TAG = "Dwdw";
+                Log.d(TAG, "iconTextViewOnClick at position " + position);
+                Log.e("Tag", albumList.get(position).getName() + "");
 
-             db = new DBAdapter(getContext());
+                if (!obj.LoginCheck(getActivity())) {
+
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.InvitationDialog);
+
+                    builder.setTitle("Login required");
+                    builder.setMessage("Record of trolley items will be maintained for 3 days only.You need to order within it.");
+                    builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+
+                        public void onClick(DialogInterface dialog, int which) {
+                            movetologin();
+                            return;
+
+                        }
+                    });
+                    AlertDialog alert = builder.create();
+                    alert.show();
+
+
+                }
+
+              else{
+                db = new DBAdapter(getContext());
                 try {
 
 
                     db.open();
-                    final String fe = db.checkItem(albumList.get(position).getName() + "");
-                    Log.e("old",fe);
+                    final String fe = db.checkItem(albumList.get(position).getName() + "", AppController.Global_Contact);
+                    Log.e("old", fe);
 
                     if (fe.equals("true")) {
+                        Time now = new Time();
+                        now.setToNow();
+                        String sTime = now.format("%Y_%m_%d %T");
+                        db.insertCart(albumList.get(position).getName() + "", albumList.get(position).getPrice() + "", a, sTime, AppController.Global_Contact);
 
-                        if(order_valid(a,albumList.get(position).getUnits(),"0").equals("true")) {
+                        Toast.makeText(getActivity(), "Added to Cart",
+                                Toast.LENGTH_SHORT).show();
+                        db.close();
 
-                            db.insertCart(albumList.get(position).getName() + "", albumList.get(position).getPrice() + "", a);
-
-                            Toast.makeText(getActivity(), "Inserted",
-                                    Toast.LENGTH_SHORT).show();
-                            db.close();
-                        }
-                        else{
-                            Toast.makeText(getActivity(),"Limit of order is: "+order_valid(a,albumList.get(position).getUnits(),"0"),
-                                    Toast.LENGTH_SHORT).show();}
-
-                    }
-                    else{
+                    } else {
 
 
-                        AlertDialog.Builder alert = new AlertDialog.Builder(v.getContext(),AlertDialog.THEME_DEVICE_DEFAULT_DARK);
+                        AlertDialog.Builder alert = new AlertDialog.Builder(v.getContext(), R.style.InvitationDialog);
                         alert.setTitle("Already added");
-                        alert.setMessage("Added "+fe+" items already\nDo you want to add "+a+" more?");
+                        alert.setMessage("Added " + fe + " items already\nDo you want to add " + a + " more?");
 
-                        alert.setPositiveButton("Add", new DialogInterface.OnClickListener() {
+                        alert.setPositiveButton("Cancel", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
-                       if((order_valid(a,albumList.get(position).getUnits(),fe).equals("true")))
 
-                                {        db.open();
-
-                                Log.e("old",fe);
-
-                                int quant=Integer.parseInt(fe);
-                                Log.e("quant",quant+"");
-                                int new_quant=Integer.parseInt(a);
-                                Log.e("nquant",new_quant+"");
-                                quant=quant+new_quant;
-                                Log.e("Totalquant",quant+"");
-                                db.updateCart(albumList.get(position).getName() + "",quant+"");
-                                    Toast.makeText(getActivity(), "Inserted",
-                                            Toast.LENGTH_SHORT).show();}
-
-
-                         else
-                                {
-                                    Toast.makeText(getActivity(),"You can add "+order_valid(a,albumList.get(position).getUnits(),fe),
-                                            Toast.LENGTH_SHORT).show();
-
-                                }
                             }
                         });
-                        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        alert.setNegativeButton("Yes", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
+
+
+                                Log.e("old", fe);
+
+                                int quant = Integer.parseInt(fe);
+                                Log.e("quant", quant + "");
+                                int new_quant = Integer.parseInt(a);
+                                Log.e("nquant", new_quant + "");
+                                quant = quant + new_quant;
+                                Log.e("Totalquant", quant + "");
+                                db.open();
+                                Time now = new Time();
+                                now.setToNow();
+                                String sTime = now.format("%Y_%m_%d %T");
+                                db.updateCart(albumList.get(position).getName() + "", quant + "", sTime, AppController.Global_Contact);
+                                Toast.makeText(getActivity(), "Added to Cart",
+                                        Toast.LENGTH_SHORT).show();
+
 
                             }
                         });
@@ -154,20 +178,15 @@ public class ProductListFrag  extends Fragment {
 
                     }
 
-                        getActivity().invalidateOptionsMenu();
+                    getActivity().invalidateOptionsMenu();
 
 
-                    }
-                catch(Exception e){
-                        Log.e("Db", "Ds");
-                    }
+                } catch (Exception e) {
+                    Log.e("Db", "Ds");
+                }
 
 
-
-
-
-
-
+            }
 
 
 
@@ -251,10 +270,28 @@ public class ProductListFrag  extends Fragment {
                     }
                 }, new Response.ErrorListener() {
             @Override
-            public void onErrorResponse(VolleyError error) {
-                VolleyLog.d(TAG, "Error: " + error.getMessage());
+            public void onErrorResponse(VolleyError volleyError) {
+
+
+                String message = null;
+                if (volleyError instanceof NetworkError) {
+                    message = "Cannot connect to Internet...Please check your connection!";
+                } else if (volleyError instanceof ServerError) {
+                    message = "The server could not be found. Please try again after some time!!";
+                } else if (volleyError instanceof AuthFailureError) {
+                    message = "Cannot connect to Internet...Please check your connection!";
+                } else if (volleyError instanceof ParseError) {
+                    message = "Parsing error! Please try again after some time!!";
+                } else if (volleyError instanceof NoConnectionError) {
+                    message = "Cannot connect to Internet...Please check your connection!";
+                } else if (volleyError instanceof TimeoutError) {
+                    message = "Connection TimeOut! Please check your internet connection.";
+                }
+
+
+
                 Toast.makeText(context,
-                        error.getMessage(), Toast.LENGTH_SHORT).show();
+                        message, Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -311,6 +348,15 @@ public class ProductListFrag  extends Fragment {
 
     }
 
+
+
+    public void movetologin()
+    {
+
+        ViewPager viewPager = (ViewPager) getActivity().findViewById(
+                R.id.viewpager);
+        viewPager.setCurrentItem(4);
+    }
 
 
 

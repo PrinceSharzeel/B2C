@@ -12,13 +12,9 @@
         android:largeHeap="true"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".HomActivity">
-        </activity>
-
-        <activity android:name=".MainActivity">
-        </activity>
+        <activity android:name=".HomActivity"></activity>
+        <activity android:name=".MainActivity"></activity>
         <activity android:name=".ProductDetail" />
-
         <activity android:name=".prod_view" />
         <activity android:name=".CheckOutFrag" />
         <activity
@@ -30,8 +26,25 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
+        <activity android:name=".PayActivity"></activity>
+
+
+        <service
+            android:name=".SensorService"
+            android:enabled="true" >
+        </service>
+
+        <receiver
+            android:name=".SensorRestarterBroadcastReceiver"
+            android:enabled="true"
+            android:exported="true"
+            android:label="RestartServiceWhenStopped">
+            <intent-filter>
+                <action android:name="uk.ac.shef.oak.ActivityRecognition.RestartSensor"/>
+            </intent-filter>
+        </receiver>
+
     </application>
 
 </manifest>
