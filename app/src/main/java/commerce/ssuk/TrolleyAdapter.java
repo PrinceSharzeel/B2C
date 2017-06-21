@@ -3,6 +3,7 @@ package commerce.ssuk;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -113,7 +114,8 @@ public class TrolleyAdapter extends RecyclerView.Adapter<TrolleyAdapter.MyViewHo
 
                 final DBAdapter db=new DBAdapter(v.getContext());
                 db.open();
-                db.deleteContact(album.getName(),AppController.Global_Contact);
+                SharedPreferences pref=mContext.getSharedPreferences("session",0);
+                db.deleteContact(album.getName(),pref.getString("contact",null));
                 Toast.makeText(mContext, "Item deleted",
                         Toast.LENGTH_SHORT).show();
                 db.close();

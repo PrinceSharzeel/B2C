@@ -6,6 +6,7 @@ package commerce.ssuk;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
@@ -29,6 +30,11 @@ public class SensorService extends Service {
     public SensorService(Context applicationContext) {
         super();
         Log.i("HERE", "here I am!");
+
+
+
+
+
     }
 
     public SensorService() {
@@ -111,7 +117,8 @@ getItems();
         try {
             final DBAdapter db = new DBAdapter(getApplicationContext());
             db.open();
-            Cursor c = db.getAllCart(AppController.Global_Contact);
+            SharedPreferences pref=getApplication().getSharedPreferences("session",0);
+            Cursor c = db.getAllCart(pref.getString("contact",null));
             if (c.moveToFirst()) {
                 do {
 
@@ -129,7 +136,9 @@ getItems();
 
                             Log.e("Db","TimeUp");
 
-                        db.deleteContact(c.getString(1),AppController.Global_Contact);
+
+
+                        db.deleteContact(c.getString(1),pref.getString("contact",null));
 
 
 
@@ -153,6 +162,11 @@ getItems();
 
 
     }
+
+
+
+
+
 
 
 

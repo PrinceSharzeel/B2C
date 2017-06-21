@@ -12,11 +12,17 @@
         android:largeHeap="true"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".HomActivity"></activity>
+        <activity android:name=".HomActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity android:name=".MainActivity"></activity>
         <activity android:name=".ProductDetail" />
         <activity android:name=".prod_view" />
         <activity android:name=".CheckOutFrag" />
+        <activity android:name=".SuccessActivity" />
         <activity
             android:name=".SplashScreen"
             android:label="@string/app_name"

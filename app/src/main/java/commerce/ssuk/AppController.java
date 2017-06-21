@@ -13,7 +13,7 @@ import com.android.volley.toolbox.Volley;
 public class AppController extends Application {
 
     public static final String TAG = AppController.class.getSimpleName();
-    public static String Global_Contact="sf";
+    public static String Global_Contact="none";
     public static String postvalye="false";
 
     public static int popcount=0;

@@ -1,6 +1,7 @@
 package commerce.ssuk;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -9,6 +10,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.IntegerRes;
 import android.support.v4.view.MenuItemCompat;
@@ -82,13 +84,20 @@ brand=(TextView)findViewById(R.id.brand);
 
 
 
+        final ProgressDialog dialog = ProgressDialog.show(ProductDetail.this, null, null);
+        ProgressBar spinner = new android.widget.ProgressBar(ProductDetail.this, null, android.R.attr.progressBarStyle);
+        spinner.getIndeterminateDrawable().setColorFilter(Color.parseColor("#009689"), android.graphics.PorterDuff.Mode.SRC_IN);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.setContentView(spinner);
+        dialog.setCancelable(false);
+        dialog.show();
 
 
         JsonArrayRequest req = new JsonArrayRequest(urlJsonArry+Name,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
-                        Log.d("Reps", response.toString());
+                        Log.d("Reps", response.toString());dialog.dismiss();
 
                         try {
 
@@ -116,117 +125,134 @@ brand=(TextView)findViewById(R.id.brand);
                                a=Integer.parseInt(person.getString("price"))+a;
                               discount.setText(a+" €");
                             discount.setPaintFlags(discount.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                  final Masker obj=new Masker();
 
 
 
+                            final SharedPreferences pref=getApplication().getSharedPreferences("session",0);
                             add.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(final View v) {
 
-                                    SharedPreferences pref = getApplication().getSharedPreferences("session", 0); // 0 - for private mode
 
 
 
 
+                                    if(obj.LoginCheck(getApplication())) {
+
+                                        AlertDialog.Builder alert = new AlertDialog.Builder(v.getContext(), AlertDialog.THEME_DEVICE_DEFAULT_DARK);
+                                        alert.setTitle("Enter the number of items ");
+                                        final EditText input = new EditText(v.getContext());
+                                        input.setTextColor(Color.WHITE);
+
+                                        input.setGravity(Gravity.CENTER_HORIZONTAL);
+                                        input.setWidth(20);
+                                        input.setInputType(InputType.TYPE_CLASS_NUMBER);
+                                        input.setRawInputType(Configuration.KEYBOARD_12KEY);
+                                        alert.setView(input);
+                                        alert.setPositiveButton("Cancel", new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int whichButton) {
+                                            }
+                                        });
+
+                                        alert.setNegativeButton("Yes", new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int whichButton) {
+                                                db = new DBAdapter(getApplicationContext());
+                                                try {
+                                                    db.open();
+                                                    final String fe = db.checkItem(person.getString("ptitle") + "", pref.getString("contact",null));
+                                                    Log.e("old", fe);
+
+                                                    if (fe.equals("true")) {
+                                                        available = Integer.parseInt(person.getString("punit"));
+                                                        int or = Integer.parseInt(input.getText().toString().trim());
+                                                        Time now = new Time();
+                                                        now.setToNow();
+                                                        String sTime = now.format("%Y_%m_%d %T");
+                                                        db.insertCart(person.getString("ptitle"), person.getString("price"), input.getText().toString().trim(), sTime, pref.getString("contact",null));
+                                                        Toast.makeText(getApplicationContext(), "Added to Cart",
+                                                                Toast.LENGTH_SHORT).show();
+                                                        db.close();
+
+                                                    } else {
 
 
-                                        AlertDialog.Builder alert = new AlertDialog.Builder(v.getContext(),AlertDialog.THEME_DEVICE_DEFAULT_DARK);
-                                    alert.setTitle("Enter the number of items ");
-                                    final EditText input = new EditText(v.getContext());
-                                    input.setTextColor(Color.WHITE);
+                                                        AlertDialog.Builder alert = new AlertDialog.Builder(v.getContext(), AlertDialog.THEME_DEVICE_DEFAULT_DARK);
+                                                        alert.setTitle("Already added");
+                                                        alert.setMessage("Added " + fe + " items already\nDo you want to add " + input.getText().toString().trim() + " more?");
 
-                                    input.setGravity(Gravity.CENTER_HORIZONTAL);
-                                    input.setWidth(20);
-                                    input.setInputType(InputType.TYPE_CLASS_NUMBER);
-                                    input.setRawInputType(Configuration.KEYBOARD_12KEY);
-                                    alert.setView(input);
-                                    alert.setPositiveButton("Cancel", new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int whichButton) {
+                                                        alert.setPositiveButton("Cancel", new DialogInterface.OnClickListener() {
+                                                            public void onClick(DialogInterface dialog, int whichButton) {
 
+                                                            }
+                                                        });
+                                                        alert.setNegativeButton("Yes", new DialogInterface.OnClickListener() {
+                                                            public void onClick(DialogInterface dialog, int whichButton) {
 
+                                                                db.open();
 
-                                        }
-                                    });
+                                                                Log.e("old", fe);
 
-                                    alert.setNegativeButton("Yes", new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int whichButton) {
-                                            db = new DBAdapter(getApplicationContext());
-                                            try {
-                                                db.open();
-                                                final String fe = db.checkItem(person.getString("ptitle")+ "",AppController.Global_Contact);
-                                                Log.e("old",fe);
-
-                                                if (fe.equals("true")) {
-                                                    available=Integer.parseInt(person.getString("punit"));
-                                                    int or=Integer.parseInt(input.getText().toString().trim());
-                                                    Time now = new Time();
-                                                    now.setToNow();
-                                                    String sTime = now.format("%Y_%m_%d %T");
-                                                   db.insertCart(person.getString("ptitle"), person.getString("price"), input.getText().toString().trim(),sTime,AppController.Global_Contact);
-                                                     Toast.makeText(getApplicationContext(), "Added to Cart",
-                                                            Toast.LENGTH_SHORT).show();
-                                                    db.close();
-
-                                                }
-                                                else{
-
-
-                                                    AlertDialog.Builder alert = new AlertDialog.Builder(v.getContext(),AlertDialog.THEME_DEVICE_DEFAULT_DARK);
-                                                    alert.setTitle("Already added");
-                                                    alert.setMessage("Added "+fe+" items already\nDo you want to add "+input.getText().toString().trim()+" more?");
-
-                                                    alert.setPositiveButton("Cancel", new DialogInterface.OnClickListener() {
-                                                        public void onClick(DialogInterface dialog, int whichButton) {
-
-                                                        }
-                                                    });
-                                                    alert.setNegativeButton("Yes", new DialogInterface.OnClickListener() {
-                                                        public void onClick(DialogInterface dialog, int whichButton) {
-
-                                                            db.open();
-
-                                                            Log.e("old",fe);
-
-                                                            int quant=Integer.parseInt(fe);
-                                                            Log.e("quant",quant+"");
-                                                            int new_quant=Integer.parseInt(input.getText().toString().trim());
-                                                            Log.e("nquant",new_quant+"");
-                                                            quant=quant+new_quant;
-                                                            Log.e("Totalquant",quant+"");
-                                                            try { Time now = new Time();
-                                                                now.setToNow();
-                                                                String sTime = now.format("%Y_%m_%d %T");
-                                                                     db.updateCart(person.getString("ptitle"),quant+"",sTime,AppController.Global_Contact);
+                                                                int quant = Integer.parseInt(fe);
+                                                                Log.e("quant", quant + "");
+                                                                int new_quant = Integer.parseInt(input.getText().toString().trim());
+                                                                Log.e("nquant", new_quant + "");
+                                                                quant = quant + new_quant;
+                                                                Log.e("Totalquant", quant + "");
+                                                                try {
+                                                                    Time now = new Time();
+                                                                    now.setToNow();
+                                                                    String sTime = now.format("%Y_%m_%d %T");
+                                                                    db.updateCart(person.getString("ptitle"), quant + "", sTime, pref.getString("contact",null));
                                                                     Toast.makeText(getApplicationContext(), "Added to Cart",
                                                                             Toast.LENGTH_SHORT).show();
 
-                                                            } catch (JSONException e) {
-                                                                e.printStackTrace();
+                                                                } catch (JSONException e) {
+                                                                    e.printStackTrace();
+                                                                }
+
+
                                                             }
+                                                        });
+                                                        alert.show();
+
+                                                        db.close();
+
+                                                    }
 
 
-                                                        }
-                                                    });
-                                                    alert.show();
-
-                                                    db.close();
-
+                                                } catch (Exception e) {
+                                                    Log.e("Db", "Ds");
                                                 }
 
 
+                                            }
+                                        });
+                                        alert.show();
+
+                                    }
+
+
+                                    else{
+                                        AlertDialog.Builder builder = new AlertDialog.Builder(ProductDetail.this, R.style.InvitationDialog);
+
+                                        builder.setTitle("Login required");
+                                        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                return;
 
                                             }
-                                            catch(Exception e){
-                                                Log.e("Db", "Ds");
-                                            }
+                                        });
+                                        AlertDialog alert = builder.create();
+                                        alert.show();
 
 
 
-                                        }
-                                    });
-                                    alert.show();
 
 
+
+                                    }
 
 
                                 }
@@ -249,7 +275,7 @@ brand=(TextView)findViewById(R.id.brand);
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                VolleyLog.d("Resp", "Error: " + error.getMessage());
+                VolleyLog.d("Resp", "Error: " + error.getMessage());dialog.dismiss();
                 Toast.makeText(getApplicationContext(),
                         error.getMessage(), Toast.LENGTH_SHORT).show();
 

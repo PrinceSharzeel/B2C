@@ -1,6 +1,9 @@
 package commerce.ssuk;
 
+import android.app.ProgressDialog;
 import android.content.SharedPreferences;import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
@@ -13,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -182,13 +186,20 @@ card1.setVisibility(View.GONE);
         cont=contact.getText().toString().trim();
         orders="1";
         final String mail="a@b.com";
+        final ProgressDialog dialog = ProgressDialog.show(getContext(), null, null);
+        ProgressBar spinner = new android.widget.ProgressBar(getContext(), null, android.R.attr.progressBarStyle);
+        spinner.getIndeterminateDrawable().setColorFilter(Color.parseColor("#009689"), android.graphics.PorterDuff.Mode.SRC_IN);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.setContentView(spinner);
+        dialog.setCancelable(false);
+        dialog.show();
 
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, REGISTER_URL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-
+                          dialog.dismiss();
 
 
                         try {
@@ -210,7 +221,7 @@ card1.setVisibility(View.GONE);
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        error.printStackTrace();
+                        error.printStackTrace();dialog.dismiss();
                         Toast.makeText(getContext(),error.toString(),Toast.LENGTH_LONG).show();
                     }
                 }){
@@ -252,13 +263,20 @@ card1.setVisibility(View.GONE);
         adder= address.getText().toString().trim();
         final String mail="a@b.com";
 
+        final ProgressDialog dialog = ProgressDialog.show(getContext(), null, null);
+        ProgressBar spinner = new android.widget.ProgressBar(getContext(), null, android.R.attr.progressBarStyle);
+        spinner.getIndeterminateDrawable().setColorFilter(Color.parseColor("#009689"), android.graphics.PorterDuff.Mode.SRC_IN);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.setContentView(spinner);
+        dialog.setCancelable(false);
+        dialog.show();
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, FINAL_REGISTER_URL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
 
-
+                        dialog.dismiss();
 
                         try {
                             JSONObject obj = new JSONObject(response); Toast.makeText(getContext(),obj.getString("ok"),Toast.LENGTH_LONG).show();
@@ -277,7 +295,7 @@ card1.setVisibility(View.GONE);
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        error.printStackTrace();
+                        error.printStackTrace();dialog.dismiss();
                         Toast.makeText(getContext(),error.toString(),Toast.LENGTH_LONG).show();
                     }
                 }){

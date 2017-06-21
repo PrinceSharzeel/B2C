@@ -24,6 +24,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -56,6 +57,7 @@ public class OrderFrag  extends Fragment{
     public static String profilepic;
     private Button checkout,checkoutt;
     private LinearLayout invoice;
+    private ProgressBar pb;
    private  String value;
    float price=0,delivery=0,total,vat=0,red=0,p=0;
 
@@ -63,6 +65,7 @@ public class OrderFrag  extends Fragment{
     private static String urlJsonArry ="http://192.168.43.227:8000/api/prod_detail/";
 
     private static String urldel ="http://192.168.43.227:8000/api/delvat/";
+    Masker ob;
     public void OrderFrag(){}
 
 
@@ -71,7 +74,7 @@ public class OrderFrag  extends Fragment{
     @Override
     public void onCreate(Bundle savedInstanceState){super.onCreate(savedInstanceState);
 
-Masker ob=new Masker();
+ ob=new Masker();
 
    if(AppController.popcount==0&&ob.LoginCheck(getActivity())) {
 
@@ -109,6 +112,14 @@ Masker ob=new Masker();
         RecyclerView.LayoutManager mLayoutmanager=new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(mLayoutmanager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
+        pb=(ProgressBar)view.findViewById(R.id.progressBar2);
+        pb.setVisibility(View.GONE);
+
+
+
+
+
+
 
 
         adapter = new TrolleyAdapter(getContext(),albumList, new TrolleyAdapter.MyAdapterListener() {
@@ -148,6 +159,10 @@ Masker ob=new Masker();
 
 
 
+
+
+
+
         recyclerView.setAdapter(adapter);
 
 
@@ -169,8 +184,11 @@ Masker ob=new Masker();
         try{
         final DBAdapter db = new DBAdapter(getContext());
         db.open();
-        Cursor c = db.getAllCart(AppController.Global_Contact);
+            SharedPreferences pref =getContext().getSharedPreferences("session",0);
+
+            Cursor c = db.getAllCart(pref.getString("contact",null));
             price=0;
+            Log.e("contageettt",pref.getString("contact",null));
 
             int i=0;
         if (c.moveToFirst())
@@ -183,6 +201,7 @@ Masker ob=new Masker();
 
                 Item it =new Item(c.getString(1),"€ "+cost,profilepic,c.getString(3));
                 price=price+cost;
+                pb.setVisibility(View.VISIBLE);
 
 
                 albumList.add(it);
@@ -193,7 +212,9 @@ Masker ob=new Masker();
 
             } while (c.moveToNext());
         }
-        adapter.notifyDataSetChanged();
+            pb.setVisibility(View.GONE);
+
+            adapter.notifyDataSetChanged();
         db.close();
         Log.e("itne h total",i+"");}
         catch (Exception e){
@@ -303,7 +324,9 @@ Masker ob=new Masker();
   {
       final DBAdapter db = new DBAdapter(getContext());
       db.open();
-      db.deleteAllItems(AppController.Global_Contact);
+
+      SharedPreferences pref=getActivity().getSharedPreferences("session",0);
+      db.deleteAllItems(pref.getString("contact",null));
       Toast.makeText(getActivity(), "Trolley Emptied",Toast.LENGTH_SHORT).show();
       db.close();
 

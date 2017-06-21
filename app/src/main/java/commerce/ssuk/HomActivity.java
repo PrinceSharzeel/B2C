@@ -13,6 +13,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
@@ -48,8 +49,6 @@ public class HomActivity extends AppCompatActivity {
     private ViewPager viewPager; private int[] tabIcons = {
             R.drawable.ic_account_balance_black_24dp,
             R.drawable.ic_add_shopping_cart_black_24dp,
-
-            R.drawable.ic_thumb_up_black_24dp,
             R.drawable.ic_local_grocery_store_black_24dp,
             R.drawable.ic_account_balance_wallet_black_24dp,
     };
@@ -83,8 +82,6 @@ public class HomActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
     String imageURL="https://www.dg.uk/wp-content/themes/dg%20placeholder/img/logo.png";
 
-
-        Log.i ("Globaaaaaaaaaaal", AppController.Global_Contact+"");
 
 
 
@@ -137,11 +134,13 @@ public class HomActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
         viewPager = (ViewPager) findViewById(R.id.viewpager);
+
         setupViewPager(viewPager);
 
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
         setupTabIcons();
+
     }
 
 
@@ -171,22 +170,25 @@ public class HomActivity extends AppCompatActivity {
 
 
 
+
+
     private void setupTabIcons() {
         tabLayout.getTabAt(0).setIcon(tabIcons[0]);
         tabLayout.getTabAt(1).setIcon(tabIcons[1]);
         tabLayout.getTabAt(2).setIcon(tabIcons[2]);
         tabLayout.getTabAt(3).setIcon(tabIcons[3]);
-        tabLayout.getTabAt(4).setIcon(tabIcons[4]);
     }
 
     private void setupViewPager(ViewPager viewPager) {
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        final ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new OneFragment(), "Home");
         adapter.addFragment(new FavFragment(), "Shop");
-        adapter.addFragment(new ProductDetailFrag(), "Favorites");
         adapter.addFragment(new OrderFrag(), "Order");
         adapter.addFragment(new AccountFrag() , "Account");
+
+
         viewPager.setAdapter(adapter);
+
     }
 
     class ViewPagerAdapter extends FragmentPagerAdapter {
@@ -232,16 +234,14 @@ public class HomActivity extends AppCompatActivity {
         MenuItem menuItem = menu.findItem(R.id.testAction);
         final DBAdapter db=new DBAdapter(getApplicationContext());
         db.open();
-        Log.e("NUmber",db.NumberOfItems(AppController.Global_Contact)+"");
-        menuItem.setIcon(buildCounterDrawable(db.NumberOfItems(AppController.Global_Contact),  R.drawable.searchtrolley));
+        SharedPreferences pref=getApplication().getSharedPreferences("session",0);
+        Log.e("NUmber",db.NumberOfItems(pref.getString("contact",null))+"");
+        menuItem.setIcon(buildCounterDrawable(db.NumberOfItems(pref.getString("contact",null)),  R.drawable.searchtrolley));
         db.close();
         return super.onCreateOptionsMenu(menu);
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if(id==R.id.testAction)
         {
@@ -249,12 +249,15 @@ public class HomActivity extends AppCompatActivity {
             tabLayout.setScrollPosition(3, 0f, true);
             TabLayout.Tab tab = tabLayout.getTabAt(3);
             tab.select();
+
         }
 
 
 
         return super.onOptionsItemSelected(item);
     }
+
+
 
 
 

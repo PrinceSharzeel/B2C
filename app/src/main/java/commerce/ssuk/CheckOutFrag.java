@@ -49,6 +49,7 @@ import org.json.JSONObject;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import static commerce.ssuk.AppController.TAG;
 import static java.security.AccessController.getContext;
@@ -278,8 +279,18 @@ public class CheckOutFrag extends AppCompatActivity  {
 
 
                                     final String a = ionput.getText().toString().trim().toUpperCase();
-                                    PinTest(a);
+                                    Masker ob=new Masker();
+                                   //ob.pincode_mask(a,getApplicationContext());
+                                    Log.e("fefefesc1213s",pin_test+"");
+                                   PinTest(a);
+                                    try {
+                                        Thread.sleep(3000);
+                                    } catch (InterruptedException e) {
+                                        e.printStackTrace();
+                                    }
+                                    Log.e("fefefescscscs",pin_test+"");
                                     if (!pin_test){
+                                        pin_test=true;
 
                                         if (!a.isEmpty()) {
                                             input.setVisibility(View.VISIBLE);
@@ -309,7 +320,7 @@ public class CheckOutFrag extends AppCompatActivity  {
                                             Toast.makeText(CheckOutFrag.this, "Pincode required", Toast.LENGTH_SHORT).show();
                                         }
                                 }
-                                else{
+                                else{pin_test=true;
 
                                         final AlertDialog.Builder alert = new AlertDialog.Builder(CheckOutFrag.this);
                                         alert.setMessage("Sorry, we cannot deliver here!");
@@ -326,7 +337,7 @@ public class CheckOutFrag extends AppCompatActivity  {
                             });
                             alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int whichButton) {
-                                    switchadd.setChecked(false);
+                                    switchadd.setChecked(false); pin_test=true;
 
                                 }
                             });
@@ -480,7 +491,7 @@ public class CheckOutFrag extends AppCompatActivity  {
 
     public void Trans()
     {
-        Intent in=new Intent(CheckOutFrag.this,PayActivity.class);
+        Intent in=new Intent(CheckOutFrag.this,SuccessActivity.class);
         Bundle data=new Bundle();
         data.putString("date",odate);
         data.putString("time",otime);
@@ -488,6 +499,7 @@ public class CheckOutFrag extends AppCompatActivity  {
         data.putString("pin",opin);
         in.putExtras(data);
         startActivity(in);
+        finish();
 
     }
 
@@ -575,11 +587,9 @@ public class CheckOutFrag extends AppCompatActivity  {
                         try {
 
 
+                            pin_test = Integer.parseInt(response.getString("value")) <= 5;
+                            Log.e("fefefescscscs",pin_test+"");
 
-
-                            if(Integer.parseInt(response.getString("value"))<=5) {
-                                pin_test=true;
-                            }
 
 
 
@@ -588,9 +598,8 @@ public class CheckOutFrag extends AppCompatActivity  {
 
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(CheckOutFrag.this,
-                                    "Error: " + e.getMessage(),
-                                    Toast.LENGTH_LONG).show();
+                            pin_test=false;
+
                         }
 
 
@@ -599,8 +608,7 @@ public class CheckOutFrag extends AppCompatActivity  {
             @Override
             public void onErrorResponse(VolleyError error) {
                 VolleyLog.d("Resp", "Error: " + error.getMessage());
-                Toast.makeText(CheckOutFrag.this,
-                        error.getMessage(), Toast.LENGTH_SHORT).show();
+              pin_test=false;
 
             }
         });

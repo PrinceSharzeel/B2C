@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -13,6 +14,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
@@ -28,6 +30,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -62,6 +65,8 @@ public class ProductListFrag  extends Fragment {
     private ProductAdapter adapter;
     private List<Orders> albumList;
     Context context;
+    SwipeRefreshLayout swipeLayout;
+
 
     DBAdapter db;
     private static String urlJsonArry = "http://192.168.43.227:8000/api/products/";
@@ -85,11 +90,17 @@ public class ProductListFrag  extends Fragment {
         //Recycler
         getActivity().invalidateOptionsMenu();
         final Masker obj=new Masker();
-
+        final ProgressBar pb=(ProgressBar)view.findViewById(R.id.pb);
+        pb.setVisibility(View.VISIBLE);
         context=getContext();
         String value = getArguments().getString("category");
         albumList=new ArrayList<>();
 // Listener to ADD button in product list
+
+
+
+
+
         adapter = new ProductAdapter(context,albumList, new ProductAdapter.MyAdapterListener() {
             @Override
             public void AddCartViewOnClick(final View v, final int position, final String a) {
@@ -102,9 +113,7 @@ public class ProductListFrag  extends Fragment {
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.InvitationDialog);
 
-                    builder.setTitle("Login required");
-                    builder.setMessage("Record of trolley items will be maintained for 3 days only.You need to order within it.");
-                    builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    builder.setTitle("Login required");builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 
                         public void onClick(DialogInterface dialog, int which) {
                             movetologin();
@@ -124,15 +133,17 @@ public class ProductListFrag  extends Fragment {
 
 
                     db.open();
-                    final String fe = db.checkItem(albumList.get(position).getName() + "", AppController.Global_Contact);
+                    final SharedPreferences pref =getContext().getSharedPreferences("session",0);
+
+                    final String fe = db.checkItem(albumList.get(position).getName() + "", pref.getString("contact",null));
                     Log.e("old", fe);
 
                     if (fe.equals("true")) {
                         Time now = new Time();
                         now.setToNow();
                         String sTime = now.format("%Y_%m_%d %T");
-                        db.insertCart(albumList.get(position).getName() + "", albumList.get(position).getPrice() + "", a, sTime, AppController.Global_Contact);
-
+                        db.insertCart(albumList.get(position).getName() + "", albumList.get(position).getPrice() + "", a, sTime, pref.getString("contact",null));
+                            Log.e("contacccccinsertct",pref.getString("contact",null));
                         Toast.makeText(getActivity(), "Added to Cart",
                                 Toast.LENGTH_SHORT).show();
                         db.close();
@@ -165,7 +176,7 @@ public class ProductListFrag  extends Fragment {
                                 Time now = new Time();
                                 now.setToNow();
                                 String sTime = now.format("%Y_%m_%d %T");
-                                db.updateCart(albumList.get(position).getName() + "", quant + "", sTime, AppController.Global_Contact);
+                                db.updateCart(albumList.get(position).getName() + "", quant + "", sTime, pref.getString("contact",null));
                                 Toast.makeText(getActivity(), "Added to Cart",
                                         Toast.LENGTH_SHORT).show();
 
@@ -206,7 +217,6 @@ public class ProductListFrag  extends Fragment {
 
 
         recyclerView=(RecyclerView)view.findViewById(R.id.recycler_view);
-       //int spancount= (int) Math.ceil( data.size() / 3f )
         RecyclerView.LayoutManager mLayoutmanager=new GridLayoutManager(getActivity(),2);
 
 
@@ -222,11 +232,15 @@ public class ProductListFrag  extends Fragment {
 
 
 
+
+
+
 //Parsing the Rest API
         JsonArrayRequest req = new JsonArrayRequest(urlJsonArry+value,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
+                        pb.setVisibility(View.GONE);
                         Log.d(TAG, response.toString());
 
                         try {
@@ -355,7 +369,7 @@ public class ProductListFrag  extends Fragment {
 
         ViewPager viewPager = (ViewPager) getActivity().findViewById(
                 R.id.viewpager);
-        viewPager.setCurrentItem(4);
+        viewPager.setCurrentItem(3);
     }
 
 
