@@ -5,18 +5,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -77,7 +71,7 @@ public class OrderFrag  extends Fragment{
  ob=new Masker();
 
    if(AppController.popcount==0&&ob.LoginCheck(getActivity())) {
-
+     ///Notification to alert trolley items limit of 3 days
        AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.InvitationDialog);
 
        builder.setTitle("Trolley Session");
@@ -121,7 +115,7 @@ public class OrderFrag  extends Fragment{
 
 
 
-
+ // adds del vat and total price charges toview
         adapter = new TrolleyAdapter(getContext(),albumList, new TrolleyAdapter.MyAdapterListener() {
             @Override
             public void AddCartViewOnClick(final View v, final int position) {
@@ -180,7 +174,7 @@ public class OrderFrag  extends Fragment{
 
 
 
-
+ // Fethces products from sqlite db and adds to List
         try{
         final DBAdapter db = new DBAdapter(getContext());
         db.open();
@@ -195,11 +189,10 @@ public class OrderFrag  extends Fragment{
         {
             do {
 
-                 ParsePic(c.getString(1));
                 Float cost=Float.parseFloat(c.getString(2))*Float.parseFloat(c.getString(3));
                 Log.e("time",c.getString(5));
 
-                Item it =new Item(c.getString(1),"€ "+cost,profilepic,c.getString(3));
+                Item it =new Item(c.getString(1),"€ "+cost,c.getString(6),c.getString(3));
                 price=price+cost;
                 pb.setVisibility(View.VISIBLE);
 
@@ -221,7 +214,7 @@ public class OrderFrag  extends Fragment{
             Log.e("Db","Ds");}
 
 
-
+  // removes all the items and empty the Cart db for the current user
         empty.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -250,7 +243,7 @@ public class OrderFrag  extends Fragment{
 
         final SharedPreferences pref =getContext().getSharedPreferences("session",0);
 
-
+// proceed to order by slot choice
 
         checkout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -263,7 +256,7 @@ public class OrderFrag  extends Fragment{
 
                     if(pref.getString("status",null).equals("logged")) {
 
-
+                         // required to have minimum price order
                                 if (price < 40.00) {
                                     Toast.makeText(getContext(),
                                             "Minimum order should be of 40 €",
@@ -319,7 +312,7 @@ public class OrderFrag  extends Fragment{
 
 
 
-
+/// Empty trolley
   public void EmptyTrolley()
   {
       final DBAdapter db = new DBAdapter(getContext());
@@ -334,7 +327,7 @@ public class OrderFrag  extends Fragment{
 
 
 
-
+//fetch del vat
 
 
   public  void delvat(final String value,float reduct)
@@ -353,6 +346,10 @@ public class OrderFrag  extends Fragment{
 
                           delivery = Long.parseLong(response.getString("del_char"));
                          vat = Long.parseLong(response.getString("vat"));
+
+                          Log.e("fln",vat+" "+delivery+" "+price);
+
+                          delVat_session(vat+"",price+"",delivery+"");
 
                           Log.e("valeeee",delivery+"/"+vat);
                           dl.setText("Delivery Charge : € 0");
@@ -398,53 +395,26 @@ public class OrderFrag  extends Fragment{
 
 
 
-    public  void ParsePic(final String value)
+
+
+
+// Store del vat in shared pref for later use
+
+    public void delVat_session(String vat,String price,String del)
     {
-
-
-        JsonArrayRequest req = new JsonArrayRequest(urlJsonArry+value,
-                new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        Log.d("Reps", response.toString());
-
-                        try {
-
-                            final JSONObject person = (JSONObject) response
-                                    .get(0);
-
-                            profilepic = person.getString("ppro");
-
-
-
-
-
-
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            Toast.makeText(getContext(),
-                                    "Error: " + e.getMessage(),
-                                    Toast.LENGTH_LONG).show();
-                        }
-
-
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                VolleyLog.d("Resp", "Error: " + error.getMessage());
-                Toast.makeText(getContext(),
-                        error.getMessage(), Toast.LENGTH_SHORT).show();
-
-            }
-        });
-
-        AppController.getInstance().addToRequestQueue(req);
-
+        SharedPreferences pref = getContext().getSharedPreferences("DelVat", 0); // 0 - for private mode
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putString("price",price);
+        editor.putString("del", del);
+        editor.putString("vat", vat);
+        editor.apply();
+        Log.e("valeesdsee",pref.getString("vat",null)+"/"+vat);
 
 
     }
+
+
+
 
 
 

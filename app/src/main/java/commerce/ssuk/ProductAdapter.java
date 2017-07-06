@@ -50,16 +50,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
             thumbnail = (ImageView) view.findViewById(R.id.thumbnail);
             add=(Button) view.findViewById(R.id.add);
 
-/*
-            add.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onClickListener.AddCartViewOnClick(v, getAdapterPosition());
-
-
-                }
-            });  */
-
+//Click on the add to add items in the cart if logged in
 
             add.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -140,8 +131,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
 
 
 
-        // loading album cover using Glide library
-        //Picasso.with(mContext).load(album.getThumbnail()).into(holder.thumbnail);
+       // further detail of product can be seen with this
         holder.thumbnail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -171,7 +161,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
     }
 
     public MyAdapterListener onClickListener;
-
+/// Made an interface for add listener on items
     public interface MyAdapterListener {
 
         void AddCartViewOnClick(View v, int position,String a);
@@ -186,149 +176,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
 
 
 
-class Products {
-    private String name,exp,category, brand ,price, unit,litres ,weight,packge,min,max,disc,pro;
-    private String thumbnail;
-
-    public Products() {
-    }
-
-    public Products(String name,String exp,String category,String brand,String price,String unit,String litres,String weight,String packge,String min,String max,String disc,String pro,String thumbnail) {
-        this.name = name;
-        this.thumbnail = thumbnail;
-        this.exp = exp;this.category= category;
-        this.brand =brand;
-        this.price =price;
-        this.packge = packge;
-        this.pro = pro;this.min= min;this.max = max;this.unit=unit; this.litres = litres;this.weight = weight;
-        this.disc = disc;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getThumbnail() {
-        return thumbnail;
-    }
-
-    public void setThumbnail(String thumbnail) {
-        this.thumbnail = thumbnail;
-    }
-
-    public String getExp() {
-        return exp;
-    }
-
-    public void setExp(String exp) {
-        this.exp = exp;
-    }
-
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category= category;
-    }
-
-    public String getBrand() {
-        return brand;
-    }
-
-    public void setBrand(String brand) {
-        this.brand =brand;
-    }
-
-    public String getPrice() {
-        return price;
-    }
-
-    public void setPrice(String price) {
-        this.price =price;
-    }
-
-
-    public String getPackge() {
-        return packge;
-    }
-
-    public void setPackge(String packge) {
-        this.packge = packge;
-    }
-
-    public String getPro() {
-        return pro;
-    }
-
-    public void setPro(String pro) {
-        this.pro = pro;
-    }
-
-    public String getMin() {
-        return min;
-    }
-
-    public void setMin(String min) {
-        this.min= min;
-    }
-    public String getMax() {
-        return max;
-    }
-
-    public void setMax(String max) {
-        this.max = max;
-    }
-
-    public String getUnit() {
-        return unit;
-    }
-
-    public void setUnit(String unit) {
-        this.unit=unit;
-    }
-
-
-    public String getLitres() {
-        return litres;
-    }
-
-    public void setLitres(String litres) {
-        this.litres = litres;
-    }
-
-
-    public String getWeight() {
-        return weight;
-    }
-
-    public void setWeight(String weight) {
-        this.weight = weight;
-    }
-
-    public String getDisc() {
-        return disc;
-    }
-
-    public void setDisc(String disc) {
-        this.disc = disc;
-    }
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-}

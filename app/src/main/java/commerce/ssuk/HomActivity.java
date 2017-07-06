@@ -1,5 +1,7 @@
 package commerce.ssuk;
 import android.app.ActivityManager;
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -7,6 +9,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -30,8 +33,15 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -48,7 +58,9 @@ public class HomActivity extends AppCompatActivity {
     public Context mcontext;
     private ViewPager viewPager; private int[] tabIcons = {
             R.drawable.ic_account_balance_black_24dp,
+
             R.drawable.ic_add_shopping_cart_black_24dp,
+            R.drawable.order,
             R.drawable.ic_local_grocery_store_black_24dp,
             R.drawable.ic_account_balance_wallet_black_24dp,
     };
@@ -80,10 +92,12 @@ public class HomActivity extends AppCompatActivity {
        setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-    String imageURL="https://www.dg.uk/wp-content/themes/dg%20placeholder/img/logo.png";
+
+        LogoSet(this);// sets shop icon on toolbar
 
 
 
+        NotifTap();// action handling on tapping notifications
 
 
         mSensorService = new SensorService(getCtx());
@@ -94,30 +108,9 @@ public class HomActivity extends AppCompatActivity {
 
 
 
+        Intent intent = new Intent(this, MyFirebaseInstanceIDService.class);
+        startService(intent);
 
-        final ActionBar ab = getSupportActionBar();
-        Picasso.with(this)
-                .load(imageURL).resize(62,62)
-                .into(new Target()
-                {
-                    @Override
-                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from)
-                    {
-                        Drawable d = new BitmapDrawable(getResources(), bitmap);
-                        ab.setIcon(d);
-                        ab.setDisplayShowHomeEnabled(true);
-                    }
-
-                    @Override
-                    public void onBitmapFailed(Drawable errorDrawable)
-                    {
-                    }
-
-                    @Override
-                    public void onPrepareLoad(Drawable placeHolderDrawable)
-                    {
-                    }
-                });
 
 
         final DBAdapter db=new DBAdapter(this);
@@ -125,7 +118,7 @@ public class HomActivity extends AppCompatActivity {
         db.close();
 
 
-        Session();
+        Session();//Maintains and checks Login sessions
 
 
 
@@ -134,6 +127,7 @@ public class HomActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
         viewPager = (ViewPager) findViewById(R.id.viewpager);
+
 
         setupViewPager(viewPager);
 
@@ -175,15 +169,19 @@ public class HomActivity extends AppCompatActivity {
     private void setupTabIcons() {
         tabLayout.getTabAt(0).setIcon(tabIcons[0]);
         tabLayout.getTabAt(1).setIcon(tabIcons[1]);
+
         tabLayout.getTabAt(2).setIcon(tabIcons[2]);
         tabLayout.getTabAt(3).setIcon(tabIcons[3]);
+        tabLayout.getTabAt(4).setIcon(tabIcons[4]);
     }
 
     private void setupViewPager(ViewPager viewPager) {
         final ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new OneFragment(), "Home");
         adapter.addFragment(new FavFragment(), "Shop");
-        adapter.addFragment(new OrderFrag(), "Order");
+
+        adapter.addFragment(new PrevOrder(), "Orders");
+        adapter.addFragment(new OrderFrag(), "Trolley");
         adapter.addFragment(new AccountFrag() , "Account");
 
 
@@ -261,7 +259,7 @@ public class HomActivity extends AppCompatActivity {
 
 
 
-
+/// To show notification count on toolbar
     public  Drawable buildCounterDrawable(int count, int backgroundImageId) {
         LayoutInflater inflater = LayoutInflater.from(this);
         View view = inflater.inflate(R.layout.counter_menuitem_layout, null);
@@ -290,6 +288,7 @@ public class HomActivity extends AppCompatActivity {
 
 
 
+    //Session maintaining fucntion
 
 
 
@@ -312,7 +311,147 @@ public class HomActivity extends AppCompatActivity {
 
     }
 
+    
+    
+    
+    //Unused and not working
+    
+    public void NotifTap()
+    {
+
+        // If a notification message is tapped, any data accompanying the notification
+        // message is available in the intent extras. In this sample the launcher
+        // intent is fired when the notification is tapped, so any accompanying data would
+        // be handled here. If you want a different intent fired, set the click_action
+        // field of the notification message to the desired intent. The launcher intent
+        // is used when no click_action is specified.
+        //
+        // Handle possible data accompanying notification message.
+        // [START handle_data_extras]
+        if (getIntent().getExtras() != null) {
+            for (String key : getIntent().getExtras().keySet()) {
+                Object value = getIntent().getExtras().get(key);
+                Log.d("Dsds", "Key: " + key + " Value: " + value);
+            }
+        }
+        
+        
+        
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+
+
+
+    public  void LogoSet(final Context cm)
+    {  String urldel ="http://192.168.43.227:8000/api/logo/";
+
+
+        JsonObjectRequest req = new JsonObjectRequest(urldel+"58e32243eaf87011c22bc744",null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        try {
+
+
+
+                           String imag = response.getString("pic");
+
+
+
+
+
+                            final ActionBar ab = getSupportActionBar();
+                            Picasso.with(cm)
+                                    .load("http://192.168.43.227:8000"+imag).resize(100,100)
+                                    .into(new Target()
+                                    {
+                                        @Override
+                                        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from)
+                                        {
+                                            Drawable d = new BitmapDrawable(getResources(), bitmap);
+                                            ab.setIcon(d);
+                                            ab.setDisplayShowHomeEnabled(true);
+                                        }
+
+                                        @Override
+                                        public void onBitmapFailed(Drawable errorDrawable)
+                                        {
+                                        }
+
+                                        @Override
+                                        public void onPrepareLoad(Drawable placeHolderDrawable)
+                                        {
+                                        }
+                                    });
+
+
+
+
+
+
+
+
+
+
+
+
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(cm,
+                                    "Error: " + e.getMessage(),
+                                    Toast.LENGTH_LONG).show();
+                        }
+
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d("Resp", "Error: " + error.getMessage());
+                Toast.makeText(cm,
+                        error.getMessage(), Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+        AppController.getInstance().addToRequestQueue(req);
 
 
 
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}

@@ -117,6 +117,10 @@ public class PayActivity extends AppCompatActivity {
                                                                             add_card(name.getText().toString(), nickname.getText().toString(), bill_add.getText().toString(), type.getSelectedItem().toString(), month.getSelectedItem().toString() + "/" + year.getSelectedItem().toString(), number.getText().toString());
 
                                                                               error.setVisibility(View.GONE);
+                                                                            Intent in=new Intent(PayActivity.this,UploadOrder.class);
+                                                                            startActivity(in);
+                                                                            finish();
+
 
 
 

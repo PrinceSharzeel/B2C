@@ -16,6 +16,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -44,6 +45,7 @@ import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -65,8 +67,7 @@ public class ProductListFrag  extends Fragment {
     private ProductAdapter adapter;
     private List<Orders> albumList;
     Context context;
-    SwipeRefreshLayout swipeLayout;
-
+    CardView placard; TextView det;
 
     DBAdapter db;
     private static String urlJsonArry = "http://192.168.43.227:8000/api/products/";
@@ -86,8 +87,6 @@ public class ProductListFrag  extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState){
         View view=inflater.inflate(R.layout.productlistfrag,container,false);
 
-        //((AppCompatActivity) getActivity()).getSupportActionBar().setIcon();
-        //Recycler
         getActivity().invalidateOptionsMenu();
         final Masker obj=new Masker();
         final ProgressBar pb=(ProgressBar)view.findViewById(R.id.pb);
@@ -95,12 +94,8 @@ public class ProductListFrag  extends Fragment {
         context=getContext();
         String value = getArguments().getString("category");
         albumList=new ArrayList<>();
-// Listener to ADD button in product list
 
-
-
-
-
+   //Modified the adapter to allow add button listener on the items in recycler view.Further check Adapter to know
         adapter = new ProductAdapter(context,albumList, new ProductAdapter.MyAdapterListener() {
             @Override
             public void AddCartViewOnClick(final View v, final int position, final String a) {
@@ -110,7 +105,7 @@ public class ProductListFrag  extends Fragment {
 
                 if (!obj.LoginCheck(getActivity())) {
 
-
+                     //if not logged in navigate to login frag
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.InvitationDialog);
 
                     builder.setTitle("Login required");builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
@@ -128,6 +123,8 @@ public class ProductListFrag  extends Fragment {
                 }
 
               else{
+
+                    // else add it to trolley
                 db = new DBAdapter(getContext());
                 try {
 
@@ -139,10 +136,12 @@ public class ProductListFrag  extends Fragment {
                     Log.e("old", fe);
 
                     if (fe.equals("true")) {
+
+                        // adding first time
                         Time now = new Time();
                         now.setToNow();
                         String sTime = now.format("%Y_%m_%d %T");
-                        db.insertCart(albumList.get(position).getName() + "", albumList.get(position).getPrice() + "", a, sTime, pref.getString("contact",null));
+                        db.insertCart(albumList.get(position).getName() + "", albumList.get(position).getPrice() + "", a, sTime, pref.getString("contact",null),albumList.get(position).getImg());
                             Log.e("contacccccinsertct",pref.getString("contact",null));
                         Toast.makeText(getActivity(), "Added to Cart",
                                 Toast.LENGTH_SHORT).show();
@@ -150,7 +149,7 @@ public class ProductListFrag  extends Fragment {
 
                     } else {
 
-
+                    // added few before,now adding more quantities in it
                         AlertDialog.Builder alert = new AlertDialog.Builder(v.getContext(), R.style.InvitationDialog);
                         alert.setTitle("Already added");
                         alert.setMessage("Added " + fe + " items already\nDo you want to add " + a + " more?");
@@ -235,8 +234,9 @@ public class ProductListFrag  extends Fragment {
 
 
 
-//Parsing the Rest API
-        JsonArrayRequest req = new JsonArrayRequest(urlJsonArry+value,
+//Parsing the Rest API to fetch the product list in a category
+        value = value.replaceAll(" ", "%20");
+        JsonArrayRequest req = new JsonArrayRequest(urlJsonArry+value+"/58e32243eaf87011c22bc744",
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
@@ -263,7 +263,7 @@ public class ProductListFrag  extends Fragment {
                                 String redprice=a+"";
 
 
-                                Orders prod=new Orders(name,price,prof,weight+" gm| "+litre,redprice,person.getString("punit"));
+                                Orders prod=new Orders(name,price,prof,weight+" gm| "+litre,redprice,person.getString("punit"),person.getString("ppro"));
                                 albumList.add(prod);
                                 Log.e("resultsuij",name);
 
@@ -319,27 +319,14 @@ public class ProductListFrag  extends Fragment {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         return view;
 
 
 
     }
 
-
+// this fucntion checked whether the stock of the shopkeeper had the quantity as per the request made by client, but
+    // is unused now..can be used in later versions.
     public String order_valid(String entered,String available,String previous)
 
     {
@@ -363,14 +350,26 @@ public class ProductListFrag  extends Fragment {
     }
 
 
-
+//Function to move to Accountfrag for login/signup
     public void movetologin()
     {
 
         ViewPager viewPager = (ViewPager) getActivity().findViewById(
                 R.id.viewpager);
-        viewPager.setCurrentItem(3);
+        viewPager.setCurrentItem(4);
     }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -202,7 +202,6 @@
                         android:layout_height="wrap_content"
                         android:background="@null"
 
-                        android:inputType="textPassword"
 
                         android:backgroundTint="@color/colorAccent"
 

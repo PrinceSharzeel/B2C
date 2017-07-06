@@ -11,7 +11,13 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkError;
+import com.android.volley.NoConnectionError;
+import com.android.volley.ParseError;
 import com.android.volley.Response;
+import com.android.volley.ServerError;
+import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
@@ -19,13 +25,18 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.DESKeySpec;
+
 import static android.R.attr.password;
-
-
+import static commerce.ssuk.AppController.TAG;
 
 
 /**
@@ -37,7 +48,6 @@ import static android.R.attr.password;
 
 
 public class Masker {
-
 
     public String pincode_mask(String pin, final Context context)
     {
@@ -181,9 +191,6 @@ JsonObjectRequest req = new JsonObjectRequest("http://api.postcodes.io/postcodes
         return Pattern.matches(".*[a-zA-Z]+.*[a-zA-Z]", name);
 
     }
-
-
-
 
 
 

@@ -57,8 +57,10 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.MyView
        final Options album = albumList.get(position);
         holder.title.setText(album.getName());
     String a=album.getName();
-        // loading album cover using Glide library
-//        Picasso.with(mContext).load(album.getThumbnail()).into(holder.thumbnail);
+
+
+
+        // selecting a category navigating to product
         holder.thumbnail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

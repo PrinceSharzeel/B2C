@@ -98,6 +98,8 @@ public class TrolleyAdapter extends RecyclerView.Adapter<TrolleyAdapter.MyViewHo
         // loading album cover using Glide library
 //        Log.e("urrr",album.getThumbnail());
         Picasso.with(mContext).load("http://192.168.43.227:8000"+album.getThumbnail()).into(holder.thumbnail);
+
+        //details of the product in the trolley
         holder.thumbnail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -107,7 +109,7 @@ public class TrolleyAdapter extends RecyclerView.Adapter<TrolleyAdapter.MyViewHo
                 v.getContext().startActivity(in);
             }
         });
-
+    // removess a specific item from trolley
         holder.close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -156,12 +158,13 @@ public class TrolleyAdapter extends RecyclerView.Adapter<TrolleyAdapter.MyViewHo
 
 
 class Orders {
-    private String name,price,pro,disc,redprice,units;
+    private String name,price,pro,disc,redprice,units,img;
     public Orders() {
     }
 
-    public Orders(String name,String price,String pro,String disc,String redprice,String units) {
+    public Orders(String name,String price,String pro,String disc,String redprice,String units,String img) {
         this.name = name;
+        this.img=img;
 
         this.pro= pro;
         this.price =price;
@@ -222,6 +225,8 @@ class Orders {
     public void setUnits(String units) {
         this.units = units;
     }
+    public String getImg(){ return  img;}
+    public void setImg(String img){this.img=img;}
 
 
 

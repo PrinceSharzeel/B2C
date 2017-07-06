@@ -130,7 +130,6 @@ public class UpdateFrag  extends Fragment{
 
                SharedPreferences pref = getContext().getSharedPreferences("session", 0); // 0 - for private mode
 
-               SharedPreferences.Editor editor = pref.edit();
                Log.e("saved password",pref.getString("password",null));
                Log.e("entered password",pswd.getText().toString().trim());
 

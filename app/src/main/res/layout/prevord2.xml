@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+
+        android:background="#DADADA"
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        >
+        <android.support.v7.widget.CardView
+            android:id="@+id/card_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="3dp"
+
+            android:elevation="8dp"
+            card_view:cardCornerRadius="@dimen/card_album_radius">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+
+                <TextView
+                    android:id="@+id/price"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:paddingLeft="@dimen/album_title_padding"
+                    android:paddingRight="@dimen/album_title_padding"
+                    android:textColor="@color/album_title"
+                    android:textSize="15sp"
+                    android:layout_marginTop="10dp"
+
+                    android:textStyle="bold"
+                    android:text="Price"
+                    android:layout_below="@+id/title"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginRight="47dp"
+                    android:layout_marginEnd="47dp"
+                    android:layout_toRightOf="@+id/imageView"
+                    android:layout_toEndOf="@+id/imageView" />
+                <TextView
+                    android:id="@+id/date"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+
+                    android:textStyle="bold"
+                    android:paddingLeft="@dimen/album_title_padding"
+                    android:paddingRight="@dimen/album_title_padding"
+                    android:textColor="@color/album_title"
+                    android:textSize="15sp"
+                    android:layout_marginTop="10dp"
+
+                    android:text="Date of Order"
+                    android:layout_below="@+id/price"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginRight="47dp"
+                    android:layout_marginEnd="47dp"
+                    android:layout_toRightOf="@+id/imageView"
+                    android:layout_toEndOf="@+id/imageView" />
+                <TextView
+                    android:id="@+id/delcharge"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+
+                    android:textStyle="bold"
+                    android:paddingLeft="@dimen/album_title_padding"
+                    android:paddingRight="@dimen/album_title_padding"
+                    android:textColor="@color/album_title"
+                    android:textSize="15sp"
+                    android:layout_marginTop="10dp"
+
+                    android:text="Date of Order"
+                    android:layout_below="@+id/date"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginRight="47dp"
+                    android:layout_marginEnd="47dp"
+                    android:layout_toRightOf="@+id/imageView"
+                    android:layout_toEndOf="@+id/imageView" />
+                <TextView
+                    android:id="@+id/vat"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+
+                    android:textStyle="bold"
+                    android:paddingLeft="@dimen/album_title_padding"
+                    android:paddingRight="@dimen/album_title_padding"
+                    android:textColor="@color/album_title"
+                    android:textSize="15sp"
+                    android:layout_marginTop="13dp"
+
+                    android:text="Get Invoice PDF"
+                    android:layout_below="@+id/delcharge"
+                    android:layout_alignLeft="@+id/delcharge"
+                    android:layout_alignStart="@+id/delcharge"
+                    android:layout_alignRight="@+id/delcharge"
+                    android:layout_alignEnd="@+id/delcharge" />
+
+
+
+                <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dip"
+                    android:layout_below="@+id/delcharge"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="40dp"
+                    android:layout_alignLeft="@+id/title"
+                    android:layout_alignStart="@+id/title">
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:id="@+id/signal"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginLeft="10dp"/>
+                    <TextView
+                        android:id="@+id/count"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:gravity="center_vertical"
+                        android:textStyle="bold"
+                        android:layout_weight="0.6"
+                        android:text="Status"
+                        android:paddingLeft="10dp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+
+                        android:backgroundTint="#1E9D96"
+                        android:textColor="@color/colorAccent"
+                        android:layout_weight="0.7"
+                        android:textSize="20dp"
+                        android:text="Number of items"
+                        android:id="@+id/quant" />
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginStart="13dp"
+                    card_view:srcCompat="@drawable/inovice"
+                    android:layout_alignTop="@+id/price"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true" />
+            </RelativeLayout>
+</android.support.v7.widget.CardView>
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/price"
+
+        android:layout_marginEnd="47dp"
+        android:layout_marginRight="47dp"
+        android:layout_marginTop="20dp"
+        android:layout_toEndOf="@+id/imageView"
+        android:layout_toRightOf="@+id/imageView"
+        android:gravity="center"
+        android:text="List of items"
+        android:textColor="@color/album_title"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+
+        android:layout_marginTop="20dp"
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clipToPadding="false"
+            android:scrollbars="vertical" />
+    </ScrollView>
+
+
+
+
+    </LinearLayout>

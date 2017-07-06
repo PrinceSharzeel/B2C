@@ -16,6 +16,8 @@ public class AppController extends Application {
     public static String Global_Contact="none";
     public static String postvalye="false";
 
+    public static  String shop_id="58e32243eaf87011c22bc744";
+
     public static int popcount=0;
 
     private RequestQueue mRequestQueue;

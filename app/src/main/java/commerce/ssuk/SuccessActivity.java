@@ -83,9 +83,20 @@ public class SuccessActivity extends AppCompatActivity {
         spin=(TextView)findViewById(R.id.vw3);
         sdate.setText("Date : "+date);
         stime.setText("Time : "+time);
-        sadd.setText("Address : "+address);
-        spin.setText("Postcode : "+pincode);
+        if(address.equals("not"))
+        {
+            sadd.setText("Pick at the Store");
+            spin.setText("");
+            SharedPreferences pref = SuccessActivity.this.getSharedPreferences("DelVat", 0); // 0 - for private mode
+            SharedPreferences.Editor editor = pref.edit();
+            editor.putString("del","null");
+            editor.apply();
+        }
+        else {
 
+            sadd.setText("Address : " + address);
+            spin.setText("Postcode : " + pincode);
+        }
 
 
         ckout.setOnClickListener(new View.OnClickListener() {
@@ -128,30 +139,6 @@ public class SuccessActivity extends AppCompatActivity {
 
 
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

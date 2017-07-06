@@ -19,6 +19,60 @@
             android:id="@+id/pb"
             android:layout_gravity="center"/>
 
+        <android.support.v7.widget.CardView
+            android:id="@+id/placard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="14dp"
+            android:layout_marginLeft="15dp"
+            android:elevation="8dp"
+            android:layout_marginRight="15dp"
+            app:cardBackgroundColor="#fff">
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/time_card"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:padding="@dimen/activity_horizontal_margin">
+
+                    <ImageView
+                        android:id="@+id/ivContactItem1"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                        android:layout_marginRight="@dimen/activity_horizontal_margin"
+
+                        android:src="@drawable/date" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/tvNumber1"
+                        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                        android:layout_marginStart="@dimen/activity_horizontal_margin"
+                        android:layout_marginTop="8dp"
+                        android:layout_toEndOf="@id/ivContactItem1"
+                        android:layout_toRightOf="@id/ivContactItem1"
+                        android:id="@+id/low"
+                        android:text="Store Closed"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                        android:textColor="@color/colorPrimaryDark" />
+                </RelativeLayout>
+
+
+
+
+
+
+
+            </RelativeLayout>
+
+        </android.support.v7.widget.CardView>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler_view"

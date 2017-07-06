@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "223883002949",
+    "firebase_url": "https://ssuk-43e76.firebaseio.com",
+    "project_id": "ssuk-43e76",
+    "storage_bucket": "ssuk-43e76.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:223883002949:android:c44932afb07b7e69",
+        "android_client_info": {
+          "package_name": "commerce.ssuk"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "223883002949-omu0sj2tqil5gita5esahlrllrqleqlr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA2XAEWsLV6brP6Jh07-CS11whq9J9NhHs"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -92,7 +92,7 @@ brand=(TextView)findViewById(R.id.brand);
         dialog.setCancelable(false);
         dialog.show();
 
-
+/// Fetch the details of Product and show it
         JsonArrayRequest req = new JsonArrayRequest(urlJsonArry+Name,
                 new Response.Listener<JSONArray>() {
                     @Override
@@ -139,7 +139,7 @@ brand=(TextView)findViewById(R.id.brand);
 
 
                                     if(obj.LoginCheck(getApplication())) {
-
+                                      //if logged in  add items
                                         AlertDialog.Builder alert = new AlertDialog.Builder(v.getContext(), AlertDialog.THEME_DEVICE_DEFAULT_DARK);
                                         alert.setTitle("Enter the number of items ");
                                         final EditText input = new EditText(v.getContext());
@@ -164,17 +164,19 @@ brand=(TextView)findViewById(R.id.brand);
                                                     Log.e("old", fe);
 
                                                     if (fe.equals("true")) {
+                                                        //if adding for the first time
                                                         available = Integer.parseInt(person.getString("punit"));
                                                         int or = Integer.parseInt(input.getText().toString().trim());
                                                         Time now = new Time();
                                                         now.setToNow();
                                                         String sTime = now.format("%Y_%m_%d %T");
-                                                        db.insertCart(person.getString("ptitle"), person.getString("price"), input.getText().toString().trim(), sTime, pref.getString("contact",null));
+                                                        db.insertCart(person.getString("ptitle"), person.getString("price"), input.getText().toString().trim(), sTime, pref.getString("contact",null),person.getString("ppro"));
                                                         Toast.makeText(getApplicationContext(), "Added to Cart",
                                                                 Toast.LENGTH_SHORT).show();
                                                         db.close();
 
                                                     } else {
+                                                        // already added few items
 
 
                                                         AlertDialog.Builder alert = new AlertDialog.Builder(v.getContext(), AlertDialog.THEME_DEVICE_DEFAULT_DARK);

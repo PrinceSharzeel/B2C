@@ -21,13 +21,15 @@ public class DBAdapter {
     public static final String KEY_QUANTITY= "quantity";
 
     public static final String KEY_CONTACT= "contact";
+
+    public static final String KEY_IMAGE= "image";
     private static final String TAG = "DBAdapter";
     private static final String DATABASE_NAME = "SSUK";
     private static final String DATABASE_TABLE = "Cart";
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_CREATE =
             "create table "+DATABASE_TABLE+" (_id integer primary key autoincrement, "
-                    + "name text,email text not null,quantity integer not null,time text not null,contact text not null);";
+                    + "name text,email text not null,quantity integer not null,time text not null,contact text not null,image text not null);";
     private final Context context;
     private DatabaseHelper DBHelper;
     private SQLiteDatabase db;
@@ -93,13 +95,15 @@ public class DBAdapter {
 
 
     //---insert a contact into the database---
-    public long insertCart(String name, String email,String quantiy,String time,String contact)
+    public long insertCart(String name, String email,String quantiy,String time,String contact,String image)
     {
         ContentValues initialValues = new ContentValues();
         initialValues.put(KEY_NAME, name);
         initialValues.put(KEY_EMAIL, email);
         initialValues.put(KEY_QUANTITY,quantiy);
         initialValues.put(KEY_TIME,time);
+
+        initialValues.put(KEY_IMAGE,image);
 
         initialValues.put(KEY_CONTACT,contact);
         return db.insert(DATABASE_TABLE, null, initialValues);
@@ -158,23 +162,6 @@ public class DBAdapter {
 
     }
 
-/*
-    public Cursor ItemCount()throws  SQLException
-    {
-        //String qcount="SELECT "+KEY_NAME+"+ , COUNT(*) FROM "+DATABASE_TABLE+" GROUP BY "+KEY_NAME+";";
-
-       String qount="SELECT\n" +
-               "\tname,\n" +
-               "\tcount(*)\n" +
-               "FROM\n" +
-               "\tCart\n" +
-               "GROUP BY\n" +
-               "\tname;";
-        return db.rawQuery(qount,null);
-
-
-
-    }*/
 
 
     //---updates a contact---
@@ -195,7 +182,7 @@ public class DBAdapter {
 
     public int NumberOfItems(String contact)
     {  int i=0; try{
-        Cursor c = db.query(DATABASE_TABLE, new String[] {KEY_ROWID, KEY_NAME,KEY_EMAIL,KEY_QUANTITY,KEY_TIME},
+        Cursor c = db.query(DATABASE_TABLE, new String[] {KEY_ROWID, KEY_NAME,KEY_EMAIL,KEY_QUANTITY,KEY_TIME,KEY_IMAGE},
 
 
                 null, null, null, null, null,null);

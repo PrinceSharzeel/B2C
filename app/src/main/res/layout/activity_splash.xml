@@ -15,6 +15,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
         android:textSize="24dp"
+        android:id="@+id/name"
         android:textStyle="bold"
         android:textColor="#cec3c3"
         android:gravity="center_horizontal"

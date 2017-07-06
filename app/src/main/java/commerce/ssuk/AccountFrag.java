@@ -40,35 +40,20 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Created by princes on 24-May-17.
  */
 public class AccountFrag  extends Fragment{
-    private RecyclerView recyclerView;
-    private TrolleyAdapter adapter;
-    private List<Item> albumList;
-    private Button empty;
     private Button sign,reg;
-    private LinearLayout invoice;
     private TextView error;
     ProgressBar pb;
-    private EditText repswd,pswd,contact,pin,nam,order,addrs,name,usrlogin,pswdlogin;
+    private EditText pin,usrlogin,pswdlogin;
 
     private static final String pin_url = "http://192.168.43.227:8000/api/postcode/";
 
     private static String urlJsonArry = "http://192.168.43.227:8000/api/login/";
-
-    public static final String KEY_USERNAME = "username";
-    public static final String KEY_PASSWORD = "password";
-
-    public static final String KEY_CONTACT = "contact";
-
-    public static final String KEY_ORDER = "orders";
-
-    public static final String KEY_NAME = "name";
-
-    public static final String KEY_ADDRESS = "address";
     public void AccountFrag(){}
 
 
@@ -152,7 +137,7 @@ try {
 
         final String dest= pin.getText().toString();
         final String origin="58e32243eaf87011c22bc744";
-        String urrr=pin_url+origin+"N"+dest;
+        String urrr=pin_url+origin+"%20"+dest;
         Log.e("Urlslfn",urrr);
 
         Masker ob = new Masker();
@@ -243,7 +228,8 @@ try {
         final String password = pswdlogin.getText().toString().trim();
 
 
-        JsonObjectRequest req = new JsonObjectRequest(urlJsonArry+contact+"N"+password,null,
+
+        JsonObjectRequest req = new JsonObjectRequest(urlJsonArry+contact+"%20"+password,null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
@@ -254,29 +240,39 @@ try {
                         try {
 
 
-                           // JSONObject userObject = new JSONObject(response.toString());
+                            try {
+                                  //delivery agnet will be navigated to different path
+                                if(response.getString("agent").equals("ok"))
+                                {
+                                    Log.d("Check1", response.getString("contact"));
+                                    TransAgent(response.getString("contact"));
+
+                                }
+
+
+                            } catch (Exception e){
+                            // JSONObject userObject = new JSONObject(response.toString());
                             Log.d("Reps", response.toString());
-                            if((response.getString("name")).equals("Check username or password"))
-                            {
+                            if ((response.getString("name")).equals("Check username or password")) {
                                 Toast.makeText(getContext(),
                                         response.getString("name"),
                                         Toast.LENGTH_LONG).show();
                                 error.setVisibility(View.VISIBLE);
                                 error.setText("Check username or password");
                                 return;
+                            } else {
+                                Toast.makeText(getContext(),
+                                        "Successfully Logged In",
+                                        Toast.LENGTH_LONG).show();
+
+
+                                SessionUpdate(response.getString("contact"),
+                                        response.getString("name"), response.getString("address"), response.getString("password"));
+                                AppController.Global_Contact = response.getString("contact");
+
+                                Trans();
                             }
-                            else{
-                            Toast.makeText(getContext(),
-                                    "Successfully Logged In",
-                                    Toast.LENGTH_LONG).show();
-
-
-                            SessionUpdate(response.getString("contact"),
-                                    response.getString("name"),response.getString("address"),response.getString("password"));
-                                AppController.Global_Contact=response.getString("contact");
-
-                          Trans();}
-
+                        }
 
 
 
@@ -346,6 +342,27 @@ public void Trans()
 
 
 }
+
+
+    public void TransAgent(String cont)
+    {
+        Fragment fragment;
+        fragment=new DeliveryAgent();
+        Bundle data= new Bundle();
+        data.putString("contact",cont);
+        fragment .setArguments(data);
+
+        FragmentTransaction transaction = ((FragmentActivity)getContext()
+        ).getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.r, fragment);
+
+        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        transaction.addToBackStack("name");
+        transaction.commit();
+
+
+
+    }
 
 
 

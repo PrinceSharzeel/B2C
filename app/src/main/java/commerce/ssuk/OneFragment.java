@@ -40,7 +40,6 @@ import java.util.List;
 public class OneFragment extends Fragment{
     public static String urlJsonObj = "http://127.0.0.1:8000/api/products";
     private static String urlJsonArry = "http://192.168.43.227:8000/api/products";
-    private static String TAG = MainActivity.class.getSimpleName();
     private static ProgressDialog pDialog;private RecyclerView recyclerView;
     private ProductAdapter adapter;private List<Item> albumList;
     int[] sampleImages = {R.drawable.car1, R.drawable.car2,R.drawable.car3};
@@ -82,7 +81,7 @@ public class OneFragment extends Fragment{
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
-                        Log.d(TAG, response.toString());
+                        Log.d("Dd", response.toString());
 
                         try {
                             for (int i = 0; i < response.length(); i++) {
@@ -111,7 +110,6 @@ public class OneFragment extends Fragment{
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                VolleyLog.d(TAG, "Error: " + error.getMessage());
                 Toast.makeText(context,
                         error.getMessage(), Toast.LENGTH_SHORT).show();
 
