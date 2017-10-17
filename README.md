@@ -1,3 +1,1 @@
-The project has:
-Look and feel of tabs with fav,order,account,Home,shop.
-The Code currently fetches json data from some random url rather that the rest api created for the B2B.
+The B2C part which has the android applciation project which connects to the Website via REST API.
